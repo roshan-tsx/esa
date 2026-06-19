@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { getBetterAuth } from "~/features/auth/server";
+import { getBetterAuth } from "~/features/auth/server/fn";
 
 const auth = getBetterAuth();
 

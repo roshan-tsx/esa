@@ -1,7 +1,7 @@
 import { queryOptions, useQuery } from "@tanstack/react-query";
 import { createAuthClient } from "better-auth/react";
 import { env } from "~/env/client";
-import { getSessionFn, getSessionOptionalFn } from "~/features/auth/server";
+import { getSessionFn, getSessionOptionalFn } from "~/features/auth/server/fn";
 
 export const authClient = createAuthClient({ baseURL: env.VITE_BASE_URL });
 

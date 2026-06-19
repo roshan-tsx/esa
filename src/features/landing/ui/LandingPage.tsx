@@ -1,4 +1,4 @@
-import { GoogleButton } from "~/features/auth/GoogleButton";
+import { GoogleButton } from "~/features/auth/ui/GoogleButton";
 
 export function LandingPage() {
 	return (
@@ -21,8 +21,8 @@ export function LandingPage() {
 					<div className="space-y-4">
 						<h2 className="text-2xl font-semibold">Join ENGIN today</h2>
 						<p className="text-sm text-muted-foreground">
-							Sign in with Google to create your account and set up your
-							founder profile in under a minute.
+							Sign in with Google to create your account and set up your founder
+							profile in under a minute.
 						</p>
 					</div>
 

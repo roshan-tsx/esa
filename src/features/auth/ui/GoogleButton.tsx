@@ -10,7 +10,11 @@ export function GoogleButton({ className }: { className?: string }) {
 		mutationFn: () =>
 			authClient.signIn.social(
 				{ provider: "google", callbackURL: "/app/dashboard" },
-				{ onError: ({ error }) => { toast.error(error.message || "Sign-in failed"); } },
+				{
+					onError: ({ error }) => {
+						toast.error(error.message || "Sign-in failed");
+					},
+				},
 			),
 	});
 
