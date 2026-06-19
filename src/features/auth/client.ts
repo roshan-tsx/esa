@@ -1,32 +1,27 @@
 import { queryOptions, useQuery } from "@tanstack/react-query";
 import { createAuthClient } from "better-auth/react";
 import { env } from "~/env/client";
-import { getMeFn, getMeOptionalFn } from "~/features/auth/server";
+import { getSessionFn, getSessionOptionalFn } from "~/features/auth/server";
 
-export const authClient = createAuthClient({
-	baseURL: env.VITE_BASE_URL,
-});
+export const authClient = createAuthClient({ baseURL: env.VITE_BASE_URL });
 
-export type Me = NonNullable<Awaited<ReturnType<typeof getMeFn>>>;
+export type Session = NonNullable<Awaited<ReturnType<typeof getSessionFn>>>;
 
-export const meQueryOptions = () =>
+export const sessionQueryOptions = () =>
 	queryOptions({
-		queryKey: ["auth", "me"],
-		queryFn: ({ signal }) => getMeFn({ signal }),
+		queryKey: ["auth", "session"],
+		queryFn: ({ signal }) => getSessionFn({ signal }),
 		retry: false,
 	});
 
-export const meOptionalQueryOptions = () =>
-	queryOptions({
-		queryKey: ["auth", "me", "optional"],
-		queryFn: ({ signal }) => getMeOptionalFn({ signal }),
-		retry: false,
-	});
-
-export function useMeOptional() {
-	return useQuery(meOptionalQueryOptions());
+export function useSession() {
+	return useQuery(sessionQueryOptions());
 }
 
-export function useMe() {
-	return useQuery(meQueryOptions());
+export function useSessionOptional() {
+	return useQuery({
+		queryKey: ["auth", "session", "optional"],
+		queryFn: ({ signal }) => getSessionOptionalFn({ signal }),
+		retry: false,
+	});
 }

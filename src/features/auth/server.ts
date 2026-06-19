@@ -1,40 +1,49 @@
-import { eq } from "drizzle-orm";
-import { createServerFn } from "@tanstack/react-start";
-import { db, profileTable } from "~/db";
-import { authMiddleware, optionalAuthMiddleware } from "~/features/auth/lib";
+import { betterAuth } from "better-auth/minimal";
+import { createMiddleware, createServerFn, createServerOnlyFn } from "@tanstack/react-start";
+import { drizzleAdapter } from "better-auth/adapters/drizzle";
+import { tanstackStartCookies } from "better-auth/tanstack-start";
+import { db } from "~/db";
+import { env } from "~/env/server";
 
-export const getMeFn = createServerFn()
+export const getBetterAuth = createServerOnlyFn(() =>
+	betterAuth({
+		baseURL: env.BASE_URL,
+		secret: env.BETTER_AUTH_SECRET,
+		telemetry: { enabled: false },
+		database: drizzleAdapter(db, { provider: "pg" }),
+		plugins: [tanstackStartCookies()],
+		socialProviders: {
+			google: {
+				clientId: env.GOOGLE_CLIENT_ID,
+				clientSecret: env.GOOGLE_CLIENT_SECRET,
+			},
+		},
+	}),
+);
+
+export const authMiddleware = createMiddleware().server(async ({ next, request }) => {
+	const session = await getBetterAuth().api.getSession({ headers: request.headers });
+	if (!session) throw new Response("Unauthorized", { status: 401 });
+	return next({ context: { user: session.user, session: session.session } });
+});
+
+export const optionalAuthMiddleware = createMiddleware().server(async ({ next, request }) => {
+	const session = await getBetterAuth().api.getSession({ headers: request.headers });
+	return next({
+		context: {
+			user: session?.user ?? null,
+			session: session?.session ?? null,
+		},
+	});
+});
+
+export const getSessionFn = createServerFn()
 	.middleware([authMiddleware])
-	.handler(({ context }) => {
-		const { session, user } = context;
-		return { session, user };
-	});
+	.handler(({ context }) => ({ user: context.user, session: context.session }));
 
-export const getMeOptionalFn = createServerFn()
+export const getSessionOptionalFn = createServerFn()
 	.middleware([optionalAuthMiddleware])
 	.handler(({ context }) => {
-		const { session, user } = context;
-		if (!session || !user) {
-			return null;
-		}
-		return { session, user };
-	});
-
-/** Single loader for all authenticated routes — session + profile in one trip. */
-export const loadAppContextFn = createServerFn()
-	.middleware([optionalAuthMiddleware])
-	.handler(async ({ context }) => {
-		const { session, user } = context;
-		if (!session || !user) {
-			return { me: null, profile: null };
-		}
-
-		const profile = await db.query.profileTable.findFirst({
-			where: eq(profileTable.id, user.id),
-		});
-
-		return {
-			me: { session, user },
-			profile: profile ?? null,
-		};
+		if (!context.session || !context.user) return null;
+		return { user: context.user, session: context.session };
 	});

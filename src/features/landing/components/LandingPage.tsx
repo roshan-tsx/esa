@@ -1,4 +1,4 @@
-import { GoogleButton } from "~/features/auth/components/GoogleButton";
+import { GoogleButton } from "~/features/auth/GoogleButton";
 
 export function LandingPage() {
 	return (

@@ -2,15 +2,13 @@ import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 import { AppShellSkeleton } from "~/features/application/components/AppShellSkeleton";
 import { Header } from "~/features/application/components/Header";
 import { BottomBar } from "~/features/application/components/Navigation";
-import { loadAppContextFn } from "~/features/auth/server";
-import { OnboardingScreen } from "~/features/profile/components/OnboardingScreen";
+import { Onboarding } from "~/features/profile/components/Onboarding";
+import { loadAppContextFn } from "~/features/profile/server";
 
 export const Route = createFileRoute("/app")({
 	beforeLoad: async () => {
 		const ctx = await loadAppContextFn();
-		if (!ctx.me) {
-			throw redirect({ to: "/" });
-		}
+		if (!ctx.session) throw redirect({ to: "/" });
 		return ctx;
 	},
 	component: AppLayout,
@@ -18,10 +16,10 @@ export const Route = createFileRoute("/app")({
 });
 
 function AppLayout() {
-	const { me, profile } = Route.useRouteContext();
+	const { session, profile } = Route.useRouteContext();
 
 	if (!profile) {
-		return <OnboardingScreen user={me.user} />;
+		return <Onboarding user={session.user} />;
 	}
 
 	return (

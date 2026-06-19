@@ -7,19 +7,13 @@ import { cn } from "~/lib/utils";
 
 export function GoogleButton({ className }: { className?: string }) {
 	const { isPending, mutate } = useMutation({
-		mutationFn: async () =>
-			await authClient.signIn.social(
-				{
-					provider: "google",
-					callbackURL: "/app/dashboard",
-				},
-				{
-					onError: ({ error }) => {
-						toast.error(error.message || "An error occurred during sign-in.");
-					},
-				},
+		mutationFn: () =>
+			authClient.signIn.social(
+				{ provider: "google", callbackURL: "/app/dashboard" },
+				{ onError: ({ error }) => { toast.error(error.message || "Sign-in failed"); } },
 			),
 	});
+
 	return (
 		<Button
 			variant="outline"

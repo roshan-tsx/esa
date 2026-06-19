@@ -1,13 +1,11 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
-import { loadAppContextFn } from "~/features/auth/server";
+import { loadAppContextFn } from "~/features/profile/server";
 import { LandingPage } from "~/features/landing/components/LandingPage";
 
 export const Route = createFileRoute("/")({
 	beforeLoad: async () => {
-		const { me } = await loadAppContextFn();
-		if (me) {
-			throw redirect({ to: "/app/dashboard" });
-		}
+		const { session } = await loadAppContextFn();
+		if (session) throw redirect({ to: "/app/dashboard" });
 	},
 	component: LandingPage,
 });

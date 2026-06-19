@@ -3,7 +3,7 @@ import { eq } from "drizzle-orm";
 import { createServerFn, createServerOnlyFn } from "@tanstack/react-start";
 import { env } from "~/env/server";
 import { db, profileTable } from "~/db";
-import { authMiddleware } from "~/features/auth/lib";
+import { authMiddleware } from "~/features/auth/server";
 
 const getDodo = createServerOnlyFn(() => {
 	return new DodoPayments({

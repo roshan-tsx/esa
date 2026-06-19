@@ -2,7 +2,7 @@ import { eq } from "drizzle-orm";
 import { createInsertSchema } from "drizzle-zod";
 import { createServerFn } from "@tanstack/react-start";
 import { db, startupTable } from "~/db";
-import { authMiddleware } from "~/features/auth/lib";
+import { authMiddleware } from "~/features/auth/server";
 
 const startupInputSchema = createInsertSchema(startupTable);
 
