@@ -8,7 +8,7 @@ import {
 } from "@tanstack/react-router";
 import { GlobalSpinner } from "~/components/globals/GlobalSpinner";
 import { Toaster } from "~/components/ui/sonner";
-import appCss from "~/lib/styles.css?url";
+import appCss from "~/styles/globals.css?url";
 
 function headTags() {
 	return {

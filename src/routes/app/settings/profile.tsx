@@ -1,17 +1,30 @@
 import { Button } from "~/components/ui/button";
-import { createFileRoute, redirect, useRouter } from "@tanstack/react-router";
-import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
+import { createFileRoute, useRouter } from "@tanstack/react-router";
+import { keepPreviousData, useMutation, useQuery } from "@tanstack/react-query";
 import { ArrowLeft, LockIcon } from "lucide-react";
 import { toast } from "sonner";
 import { Spinner } from "~/components/ui/spinner";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
-import { profileQueryOptions } from "~/features/auth/auth-client";
+import { profileQueryOptions } from "~/features/profile/client";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod/dist/zod.js";
 import { Field, FieldError, FieldLabel } from "~/components/ui/field";
-import { updateMyProfileFn } from "~/features/profile/profile.fn";
+import { updateMyProfile } from "~/features/profile/server";
+import { ProfileSettingsSkeleton } from "~/features/profile/components/ProfileSettingsSkeleton";
 import z from "zod";
+
+const ProfileSchema = z.object({
+	full_name: z
+		.string()
+		.trim()
+		.min(4, "Full name must be at least 4 characters")
+		.max(100, "Full name is too long")
+		.regex(
+			/^[A-Za-z]+(?: [A-Za-z]+)*$/,
+			"Full name can only contain letters and single spaces, and must start with a letter",
+		),
+});
 
 export const Route = createFileRoute("/app/settings/profile")({
 	component: RouteComponent,
@@ -20,20 +33,9 @@ export const Route = createFileRoute("/app/settings/profile")({
 function RouteComponent() {
 	const { qc } = Route.useRouteContext();
 	const router = useRouter();
-	const { data: profile } = useSuspenseQuery(profileQueryOptions());
-	if (profile === null) {
-		throw redirect({ to: "/join" });
-	}
-	const ProfileSchema = z.object({
-		full_name: z
-			.string()
-			.trim()
-			.min(4, "Full name must be at least 4 characters")
-			.max(100, "Full name is too long")
-			.regex(
-				/^[A-Za-z]+(?: [A-Za-z]+)*$/,
-				"Full name can only contain letters and single spaces, and must start with a letter",
-			),
+	const { data: profile, isLoading, isFetching } = useQuery({
+		...profileQueryOptions(),
+		placeholderData: keepPreviousData,
 	});
 
 	const {
@@ -42,23 +44,45 @@ function RouteComponent() {
 		formState: { errors },
 	} = useForm({
 		defaultValues: {
-			full_name: profile.full_name ?? undefined,
+			full_name: profile?.full_name ?? "",
 		},
 		resolver: zodResolver(ProfileSchema),
 	});
 	const { mutate, isPending } = useMutation({
-		mutationFn: updateMyProfileFn,
+		mutationFn: updateMyProfile,
+		onMutate: async ({ data }) => {
+			await qc.cancelQueries({ queryKey: profileQueryOptions().queryKey });
+			const previousProfile = qc.getQueryData(profileQueryOptions().queryKey);
+			qc.setQueryData(
+				profileQueryOptions().queryKey,
+				(oldProfile: typeof profile | null | undefined) =>
+				oldProfile ? { ...oldProfile, ...data } : oldProfile,
+			);
+			return { previousProfile };
+		},
+		onError: (_err, _variables, context) => {
+			if (context?.previousProfile) {
+				qc.setQueryData(profileQueryOptions().queryKey, context.previousProfile);
+			}
+			toast.error("Error occurred while updating");
+		},
 		onSuccess: async () => {
 			qc.invalidateQueries(profileQueryOptions());
 			toast.success("Profile updated successfully");
 		},
-		onError: () => {
-			toast.error("Error occurred while updating");
-		},
 	});
+
+	if (isLoading) {
+		return <ProfileSettingsSkeleton />;
+	}
+
+	if (!profile) {
+		return null;
+	}
 
 	return (
 		<div className="flex-1 flex-col flex">
+			{isFetching ? <div className="h-0.5 w-full bg-primary/40 animate-pulse" /> : null}
 			<div className="flex justify-start gap-2 py-2">
 				<Button
 					variant={"ghost"}

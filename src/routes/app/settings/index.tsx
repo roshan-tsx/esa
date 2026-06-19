@@ -11,7 +11,7 @@ function RouteComponent() {
 		{ name: "Profile", path: "/app/settings/profile", icon: User },
 		{ name: "Billing", path: "/app/settings/billing", icon: CreditCard },
 	];
-
+   
 	return (
 		<div className="flex-1 flex-col flex">
 			<p className="text-xl text-muted-foreground font-bold p-4">Settings</p>

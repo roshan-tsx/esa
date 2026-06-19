@@ -1,9 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Webhooks } from "@dodopayments/tanstack";
 import { env } from "~/env/server";
-import { db } from "~/db";
-import { profileTable } from "~/db/schema";
-import { eq } from "drizzle-orm";
+import { setSubscriptionStatusByEmail } from "~/features/subscription/server";
 
 export const Route = createFileRoute("/api/dodo/webhooks")({
 	server: {
@@ -16,52 +14,44 @@ export const Route = createFileRoute("/api/dodo/webhooks")({
 						const {
 							customer: { email },
 						} = data;
-						await db
-							.update(profileTable)
-							.set({
-								user_type: "pro",
-								subscription_status: "active",
-							})
-							.where(eq(profileTable.email, email));
+						await setSubscriptionStatusByEmail({
+							email,
+							userType: "pro",
+							subscriptionStatus: "active",
+						});
 						console.log("Subscription Renewed for Customer:", email);
 					},
 					onSubscriptionActive: async ({ data }) => {
 						const {
 							customer: { email },
 						} = data;
-						await db
-							.update(profileTable)
-							.set({
-								user_type: "pro",
-								subscription_status: "active",
-							})
-							.where(eq(profileTable.email, email));
+						await setSubscriptionStatusByEmail({
+							email,
+							userType: "pro",
+							subscriptionStatus: "active",
+						});
 						console.log("Subscription Activated for Customer:", email);
 					},
 					onSubscriptionPaused: async ({ data }) => {
 						const {
 							customer: { email },
 						} = data;
-						await db
-							.update(profileTable)
-							.set({
-								user_type: "basic",
-								subscription_status: "on_hold",
-							})
-							.where(eq(profileTable.email, email));
+						await setSubscriptionStatusByEmail({
+							email,
+							userType: "basic",
+							subscriptionStatus: "on_hold",
+						});
 						console.log("Subscription Paused for Customer:", email);
 					},
 					onSubscriptionOnHold: async ({ data }) => {
 						const {
 							customer: { email },
 						} = data;
-						await db
-							.update(profileTable)
-							.set({
-								user_type: "basic",
-								subscription_status: "on_hold",
-							})
-							.where(eq(profileTable.email, email));
+						await setSubscriptionStatusByEmail({
+							email,
+							userType: "basic",
+							subscriptionStatus: "on_hold",
+						});
 						console.log("Subscription On Hold for Customer:", email);
 					},
 
@@ -69,39 +59,33 @@ export const Route = createFileRoute("/api/dodo/webhooks")({
 						const {
 							customer: { email },
 						} = data;
-						await db
-							.update(profileTable)
-							.set({
-								user_type: "basic",
-								subscription_status: "inactive",
-							})
-							.where(eq(profileTable.email, email));
+						await setSubscriptionStatusByEmail({
+							email,
+							userType: "basic",
+							subscriptionStatus: "inactive",
+						});
 						console.log("Subscription Failed for Customer:", email);
 					},
 					onSubscriptionExpired: async ({ data }) => {
 						const {
 							customer: { email },
 						} = data;
-						await db
-							.update(profileTable)
-							.set({
-								user_type: "basic",
-								subscription_status: "inactive",
-							})
-							.where(eq(profileTable.email, email));
+						await setSubscriptionStatusByEmail({
+							email,
+							userType: "basic",
+							subscriptionStatus: "inactive",
+						});
 						console.log("Subscription Expired for Customer:", email);
 					},
 					onSubscriptionCancelled: async ({ data }) => {
 						const {
 							customer: { email },
 						} = data;
-						await db
-							.update(profileTable)
-							.set({
-								user_type: "basic",
-								subscription_status: "inactive",
-							})
-							.where(eq(profileTable.email, email));
+						await setSubscriptionStatusByEmail({
+							email,
+							userType: "basic",
+							subscriptionStatus: "inactive",
+						});
 						console.log("Subscription Cancelled for Customer:", email);
 					},
 

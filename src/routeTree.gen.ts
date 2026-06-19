@@ -11,9 +11,6 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AppRouteRouteImport } from './routes/app/route'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as WaitIndexRouteImport } from './routes/wait/index'
-import { Route as LoginIndexRouteImport } from './routes/login/index'
-import { Route as JoinIndexRouteImport } from './routes/join/index'
 import { Route as AppStartupsRouteRouteImport } from './routes/app/startups/route'
 import { Route as AppSettingsIndexRouteImport } from './routes/app/settings/index'
 import { Route as AppNotificationsIndexRouteImport } from './routes/app/notifications/index'
@@ -26,7 +23,9 @@ import { Route as AppSettingsBillingIndexRouteImport } from './routes/app/settin
 import { Route as AppExploreStartupsIndexRouteImport } from './routes/app/explore/startups/index'
 import { Route as AppExploreSprintsIndexRouteImport } from './routes/app/explore/sprints/index'
 import { Route as AppSettingsBillingProRouteImport } from './routes/app/settings/billing/pro'
+import { Route as AppDashboardStartupNewIndexRouteImport } from './routes/app/dashboard/startup/new/index'
 import { Route as AppDashboardStartupNewVerifypanRouteImport } from './routes/app/dashboard/startup/new/verifypan'
+import { Route as AppDashboardStartupNewConfirmRouteImport } from './routes/app/dashboard/startup/new/confirm'
 
 const AppRouteRoute = AppRouteRouteImport.update({
   id: '/app',
@@ -36,21 +35,6 @@ const AppRouteRoute = AppRouteRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const WaitIndexRoute = WaitIndexRouteImport.update({
-  id: '/wait/',
-  path: '/wait/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LoginIndexRoute = LoginIndexRouteImport.update({
-  id: '/login/',
-  path: '/login/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const JoinIndexRoute = JoinIndexRouteImport.update({
-  id: '/join/',
-  path: '/join/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AppStartupsRouteRoute = AppStartupsRouteRouteImport.update({
@@ -113,10 +97,22 @@ const AppSettingsBillingProRoute = AppSettingsBillingProRouteImport.update({
   path: '/settings/billing/pro',
   getParentRoute: () => AppRouteRoute,
 } as any)
+const AppDashboardStartupNewIndexRoute =
+  AppDashboardStartupNewIndexRouteImport.update({
+    id: '/dashboard/startup/new/',
+    path: '/dashboard/startup/new/',
+    getParentRoute: () => AppRouteRoute,
+  } as any)
 const AppDashboardStartupNewVerifypanRoute =
   AppDashboardStartupNewVerifypanRouteImport.update({
     id: '/dashboard/startup/new/verifypan',
     path: '/dashboard/startup/new/verifypan',
+    getParentRoute: () => AppRouteRoute,
+  } as any)
+const AppDashboardStartupNewConfirmRoute =
+  AppDashboardStartupNewConfirmRouteImport.update({
+    id: '/dashboard/startup/new/confirm',
+    path: '/dashboard/startup/new/confirm',
     getParentRoute: () => AppRouteRoute,
   } as any)
 
@@ -124,9 +120,6 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/app': typeof AppRouteRouteWithChildren
   '/app/startups': typeof AppStartupsRouteRoute
-  '/join': typeof JoinIndexRoute
-  '/login': typeof LoginIndexRoute
-  '/wait': typeof WaitIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/dodo/webhooks': typeof ApiDodoWebhooksRoute
   '/app/settings/profile': typeof AppSettingsProfileRoute
@@ -138,15 +131,14 @@ export interface FileRoutesByFullPath {
   '/app/explore/sprints': typeof AppExploreSprintsIndexRoute
   '/app/explore/startups': typeof AppExploreStartupsIndexRoute
   '/app/settings/billing': typeof AppSettingsBillingIndexRoute
+  '/app/dashboard/startup/new/confirm': typeof AppDashboardStartupNewConfirmRoute
   '/app/dashboard/startup/new/verifypan': typeof AppDashboardStartupNewVerifypanRoute
+  '/app/dashboard/startup/new': typeof AppDashboardStartupNewIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/app': typeof AppRouteRouteWithChildren
   '/app/startups': typeof AppStartupsRouteRoute
-  '/join': typeof JoinIndexRoute
-  '/login': typeof LoginIndexRoute
-  '/wait': typeof WaitIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/dodo/webhooks': typeof ApiDodoWebhooksRoute
   '/app/settings/profile': typeof AppSettingsProfileRoute
@@ -158,16 +150,15 @@ export interface FileRoutesByTo {
   '/app/explore/sprints': typeof AppExploreSprintsIndexRoute
   '/app/explore/startups': typeof AppExploreStartupsIndexRoute
   '/app/settings/billing': typeof AppSettingsBillingIndexRoute
+  '/app/dashboard/startup/new/confirm': typeof AppDashboardStartupNewConfirmRoute
   '/app/dashboard/startup/new/verifypan': typeof AppDashboardStartupNewVerifypanRoute
+  '/app/dashboard/startup/new': typeof AppDashboardStartupNewIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/app': typeof AppRouteRouteWithChildren
   '/app/startups': typeof AppStartupsRouteRoute
-  '/join/': typeof JoinIndexRoute
-  '/login/': typeof LoginIndexRoute
-  '/wait/': typeof WaitIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/dodo/webhooks': typeof ApiDodoWebhooksRoute
   '/app/settings/profile': typeof AppSettingsProfileRoute
@@ -179,7 +170,9 @@ export interface FileRoutesById {
   '/app/explore/sprints/': typeof AppExploreSprintsIndexRoute
   '/app/explore/startups/': typeof AppExploreStartupsIndexRoute
   '/app/settings/billing/': typeof AppSettingsBillingIndexRoute
+  '/app/dashboard/startup/new/confirm': typeof AppDashboardStartupNewConfirmRoute
   '/app/dashboard/startup/new/verifypan': typeof AppDashboardStartupNewVerifypanRoute
+  '/app/dashboard/startup/new/': typeof AppDashboardStartupNewIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -187,9 +180,6 @@ export interface FileRouteTypes {
     | '/'
     | '/app'
     | '/app/startups'
-    | '/join'
-    | '/login'
-    | '/wait'
     | '/api/auth/$'
     | '/api/dodo/webhooks'
     | '/app/settings/profile'
@@ -201,15 +191,14 @@ export interface FileRouteTypes {
     | '/app/explore/sprints'
     | '/app/explore/startups'
     | '/app/settings/billing'
+    | '/app/dashboard/startup/new/confirm'
     | '/app/dashboard/startup/new/verifypan'
+    | '/app/dashboard/startup/new'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/app'
     | '/app/startups'
-    | '/join'
-    | '/login'
-    | '/wait'
     | '/api/auth/$'
     | '/api/dodo/webhooks'
     | '/app/settings/profile'
@@ -221,15 +210,14 @@ export interface FileRouteTypes {
     | '/app/explore/sprints'
     | '/app/explore/startups'
     | '/app/settings/billing'
+    | '/app/dashboard/startup/new/confirm'
     | '/app/dashboard/startup/new/verifypan'
+    | '/app/dashboard/startup/new'
   id:
     | '__root__'
     | '/'
     | '/app'
     | '/app/startups'
-    | '/join/'
-    | '/login/'
-    | '/wait/'
     | '/api/auth/$'
     | '/api/dodo/webhooks'
     | '/app/settings/profile'
@@ -241,15 +229,14 @@ export interface FileRouteTypes {
     | '/app/explore/sprints/'
     | '/app/explore/startups/'
     | '/app/settings/billing/'
+    | '/app/dashboard/startup/new/confirm'
     | '/app/dashboard/startup/new/verifypan'
+    | '/app/dashboard/startup/new/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AppRouteRoute: typeof AppRouteRouteWithChildren
-  JoinIndexRoute: typeof JoinIndexRoute
-  LoginIndexRoute: typeof LoginIndexRoute
-  WaitIndexRoute: typeof WaitIndexRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
   ApiDodoWebhooksRoute: typeof ApiDodoWebhooksRoute
 }
@@ -268,27 +255,6 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/wait/': {
-      id: '/wait/'
-      path: '/wait'
-      fullPath: '/wait'
-      preLoaderRoute: typeof WaitIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/login/': {
-      id: '/login/'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof LoginIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/join/': {
-      id: '/join/'
-      path: '/join'
-      fullPath: '/join'
-      preLoaderRoute: typeof JoinIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/app/startups': {
@@ -375,11 +341,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppSettingsBillingProRouteImport
       parentRoute: typeof AppRouteRoute
     }
+    '/app/dashboard/startup/new/': {
+      id: '/app/dashboard/startup/new/'
+      path: '/dashboard/startup/new'
+      fullPath: '/app/dashboard/startup/new'
+      preLoaderRoute: typeof AppDashboardStartupNewIndexRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
     '/app/dashboard/startup/new/verifypan': {
       id: '/app/dashboard/startup/new/verifypan'
       path: '/dashboard/startup/new/verifypan'
       fullPath: '/app/dashboard/startup/new/verifypan'
       preLoaderRoute: typeof AppDashboardStartupNewVerifypanRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/app/dashboard/startup/new/confirm': {
+      id: '/app/dashboard/startup/new/confirm'
+      path: '/dashboard/startup/new/confirm'
+      fullPath: '/app/dashboard/startup/new/confirm'
+      preLoaderRoute: typeof AppDashboardStartupNewConfirmRouteImport
       parentRoute: typeof AppRouteRoute
     }
   }
@@ -396,7 +376,9 @@ interface AppRouteRouteChildren {
   AppExploreSprintsIndexRoute: typeof AppExploreSprintsIndexRoute
   AppExploreStartupsIndexRoute: typeof AppExploreStartupsIndexRoute
   AppSettingsBillingIndexRoute: typeof AppSettingsBillingIndexRoute
+  AppDashboardStartupNewConfirmRoute: typeof AppDashboardStartupNewConfirmRoute
   AppDashboardStartupNewVerifypanRoute: typeof AppDashboardStartupNewVerifypanRoute
+  AppDashboardStartupNewIndexRoute: typeof AppDashboardStartupNewIndexRoute
 }
 
 const AppRouteRouteChildren: AppRouteRouteChildren = {
@@ -410,7 +392,9 @@ const AppRouteRouteChildren: AppRouteRouteChildren = {
   AppExploreSprintsIndexRoute: AppExploreSprintsIndexRoute,
   AppExploreStartupsIndexRoute: AppExploreStartupsIndexRoute,
   AppSettingsBillingIndexRoute: AppSettingsBillingIndexRoute,
+  AppDashboardStartupNewConfirmRoute: AppDashboardStartupNewConfirmRoute,
   AppDashboardStartupNewVerifypanRoute: AppDashboardStartupNewVerifypanRoute,
+  AppDashboardStartupNewIndexRoute: AppDashboardStartupNewIndexRoute,
 }
 
 const AppRouteRouteWithChildren = AppRouteRoute._addFileChildren(
@@ -420,9 +404,6 @@ const AppRouteRouteWithChildren = AppRouteRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AppRouteRoute: AppRouteRouteWithChildren,
-  JoinIndexRoute: JoinIndexRoute,
-  LoginIndexRoute: LoginIndexRoute,
-  WaitIndexRoute: WaitIndexRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
   ApiDodoWebhooksRoute: ApiDodoWebhooksRoute,
 }

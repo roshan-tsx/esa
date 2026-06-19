@@ -1,29 +1,29 @@
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
-import { Header } from "~/components/layouts/Header";
-import { BottomBar } from "~/components/layouts/Navigation";
-import { GlobalSpinner } from "~/components/globals/GlobalSpinner";
-import { profileQueryOptions } from "~/features/auth/auth-client";
-import { bypassMainFn } from "~/features/auth/bypass-main";
+import { AppShellSkeleton } from "~/features/application/components/AppShellSkeleton";
+import { Header } from "~/features/application/components/Header";
+import { BottomBar } from "~/features/application/components/Navigation";
+import { loadAppContextFn } from "~/features/auth/server";
+import { OnboardingScreen } from "~/features/profile/components/OnboardingScreen";
 
 export const Route = createFileRoute("/app")({
-	component: AppLayout,
-	pendingComponent: GlobalSpinner,
-
-	beforeLoad: async ({ context }) => {
-		const allowed = await bypassMainFn();
-		if (!allowed) {
-			throw redirect({ to: "/wait" });
+	beforeLoad: async () => {
+		const ctx = await loadAppContextFn();
+		if (!ctx.me) {
+			throw redirect({ to: "/" });
 		}
-
-		const profile = await context.qc.ensureQueryData(profileQueryOptions());
-
-		if (!profile || !profile.onboarding_complete) {
-			throw redirect({ to: "/join" });
-		}
+		return ctx;
 	},
+	component: AppLayout,
+	pendingComponent: AppShellSkeleton,
 });
 
 function AppLayout() {
+	const { me, profile } = Route.useRouteContext();
+
+	if (!profile) {
+		return <OnboardingScreen user={me.user} />;
+	}
+
 	return (
 		<div className="min-h-screen w-screen flex flex-col p-2 gap-2">
 			<Header />

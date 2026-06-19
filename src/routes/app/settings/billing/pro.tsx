@@ -2,7 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
-import { buyProPlanFn } from "~/features/subscription/subscrption.fn";
+import { buyProPlan } from "~/features/subscription/server";
 
 export const Route = createFileRoute("/app/settings/billing/pro")({
 	component: RouteComponent,
@@ -11,7 +11,7 @@ export const Route = createFileRoute("/app/settings/billing/pro")({
 export function RouteComponent() {
 	const router = useRouter();
 	const { isPending, mutate } = useMutation({
-		mutationFn: buyProPlanFn,
+		mutationFn: buyProPlan,
 		onSuccess: ({ checkout_url }) => {
 			router.navigate({ href: checkout_url });
 		},
@@ -28,7 +28,7 @@ export function RouteComponent() {
 					a generic table to show basic vs pro features.
 				</p>
 				<Button onClick={() => mutate({})} disabled={isPending}>
-					Buy Pro Plan
+					{isPending ? "Applying..." : "Buy Pro Plan"}
 				</Button>
 			</div>
 		</div>

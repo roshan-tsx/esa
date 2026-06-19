@@ -1,43 +1,28 @@
-// import { zodResolver } from "@hookform/resolvers/zod";
-// import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
-// import { createFileRoute } from "@tanstack/react-router";
-// import { useForm } from "react-hook-form";
-// import z from "zod";
-// import { getDetailsFromMcaFn } from "~/server/functions/sandbox";
-// import { AddStartupFn } from "~/server/functions/startups";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { Button } from "~/components/ui/button";
 
-// export const Route = createFileRoute("/app/dashboard/startup/new/confirm")({
-// 	component: RouteComponent,
-// 	validateSearch: z.object({
-// 		cin: z.string().min(5, "CIN is too short").max(20, "CIN is too long"),
-// 	}),
-// });
+export const Route = createFileRoute("/app/dashboard/startup/new/confirm")({
+	component: RouteComponent,
+});
 
-// const ConfirmationSchema = z.object({
-// 	reg_date: z.date(),
-// });
-
-// function RouteComponent() {
-// 	const { cin } = Route.useSearch();
-// 	const { data } = useSuspenseQuery({
-// 		queryKey: ["startup-confirmation", cin],
-// 		queryFn: () => getDetailsFromMcaFn({ data: { cin } }),
-// 	});
-// 	const { mutate } = useMutation({
-// 		mutationFn: AddStartupFn,
-// 	});
-
-// 	const {
-// 		formState: { errors },
-// 		register,
-// 		handleSubmit,
-// 	} = useForm({
-// 		resolver: zodResolver(ConfirmationSchema),
-// 	});
-// 	return (
-// 		<div className="flex-1  items-center justify-center flex">
-// 			Confirm Startup Creation Page for cin: {cin}
-// 			<pre>{JSON.stringify(data, null, 2)}</pre>
-// 		</div>
-// 	);
-// }
+function RouteComponent() {
+	return (
+		<div className="flex flex-1 items-center justify-center p-6">
+			<div className="w-full max-w-xl rounded-2xl border bg-card/40 p-6 text-center">
+				<p className="text-2xl font-semibold">Confirm Startup Details</p>
+				<p className="mt-2 text-sm text-muted-foreground">
+					Confirmation step is temporarily unavailable while this feature is
+					being migrated.
+				</p>
+				<div className="mt-6 flex items-center justify-center gap-3">
+					<Button asChild>
+						<Link to="/app/dashboard/startup/new">Back to new startup</Link>
+					</Button>
+					<Button asChild variant="outline">
+						<Link to="/app/dashboard">Back to dashboard</Link>
+					</Button>
+				</div>
+			</div>
+		</div>
+	);
+}
