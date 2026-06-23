@@ -1,36 +1,30 @@
+import { GitPullRequestArrow } from "lucide-react";
+import { EmailAuthForm } from "~/features/auth/ui/EmailAuthForm";
 import { GoogleButton } from "~/features/auth/ui/GoogleButton";
 
 export function LandingPage() {
 	return (
-		<div className="min-h-screen bg-background text-foreground">
-			<div className="mx-auto grid min-h-screen max-w-6xl grid-cols-1 items-center gap-12 px-6 py-10 md:grid-cols-2 md:px-10">
-				<section className="space-y-6">
-					<p className="text-sm font-medium tracking-wide text-primary">
-						ENGIN
-					</p>
-					<h1 className="text-4xl font-bold leading-tight md:text-6xl">
-						Happening now for founders
-					</h1>
-					<p className="max-w-md text-base text-muted-foreground md:text-lg">
-						Build startups, connect with builders, and move from idea to launch
-						in one focused workspace.
-					</p>
-				</section>
+		<div className="min-h-screen flex bg-background items-center text-foreground p-10 justify-around gap-10">
+			<section className="flex justify-center border-r pr-10">
+				<GitPullRequestArrow
+					className="size-32 text-primary sm:size-40"
+					strokeWidth={2}
+				/>
+			</section>
 
-				<section className="w-full max-w-sm justify-self-start rounded-2xl border bg-card/40 p-6 backdrop-blur md:justify-self-end">
-					<div className="space-y-4">
-						<h2 className="text-2xl font-semibold">Join ENGIN today</h2>
-						<p className="text-sm text-muted-foreground">
-							Sign in with Google to create your account and set up your founder
-							profile in under a minute.
-						</p>
+			<section className="flex w-full max-w-md flex-1 flex-col gap-8">
+				<h1 className="text-4xl font-bold leading-tight tracking-tight sm:text-5xl">
+					The Fast Lane For Founders
+				</h1>
+				<div className="flex flex-col gap-4">
+					<GoogleButton />
+					<div className="relative text-center text-sm text-muted-foreground">
+						<span className="bg-background px-2 relative z-10">or</span>
+						<div className="absolute inset-x-0 top-1/2 border-t" />
 					</div>
-
-					<div className="mt-6">
-						<GoogleButton className="w-full" />
-					</div>
-				</section>
-			</div>
+					<EmailAuthForm />
+				</div>
+			</section>
 		</div>
 	);
 }

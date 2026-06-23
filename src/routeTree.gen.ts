@@ -11,21 +11,11 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AppRouteRouteImport } from './routes/app/route'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as AppStartupsRouteRouteImport } from './routes/app/startups/route'
-import { Route as AppSettingsIndexRouteImport } from './routes/app/settings/index'
-import { Route as AppNotificationsIndexRouteImport } from './routes/app/notifications/index'
-import { Route as AppExploreIndexRouteImport } from './routes/app/explore/index'
+import { Route as PricingIndexRouteImport } from './routes/pricing/index'
+import { Route as InviteTokenRouteImport } from './routes/invite/$token'
+import { Route as AppTeamIndexRouteImport } from './routes/app/team/index'
 import { Route as AppDashboardIndexRouteImport } from './routes/app/dashboard/index'
-import { Route as AppSettingsProfileRouteImport } from './routes/app/settings/profile'
-import { Route as ApiDodoWebhooksRouteImport } from './routes/api/dodo/webhooks'
-import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
-import { Route as AppSettingsBillingIndexRouteImport } from './routes/app/settings/billing/index'
-import { Route as AppExploreStartupsIndexRouteImport } from './routes/app/explore/startups/index'
-import { Route as AppExploreSprintsIndexRouteImport } from './routes/app/explore/sprints/index'
-import { Route as AppSettingsBillingProRouteImport } from './routes/app/settings/billing/pro'
-import { Route as AppDashboardStartupNewIndexRouteImport } from './routes/app/dashboard/startup/new/index'
-import { Route as AppDashboardStartupNewVerifypanRouteImport } from './routes/app/dashboard/startup/new/verifypan'
-import { Route as AppDashboardStartupNewConfirmRouteImport } from './routes/app/dashboard/startup/new/confirm'
+import { Route as AppStartupsNewRouteImport } from './routes/app/startups/new'
 
 const AppRouteRoute = AppRouteRouteImport.update({
   id: '/app',
@@ -37,24 +27,19 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AppStartupsRouteRoute = AppStartupsRouteRouteImport.update({
-  id: '/startups',
-  path: '/startups',
-  getParentRoute: () => AppRouteRoute,
+const PricingIndexRoute = PricingIndexRouteImport.update({
+  id: '/pricing/',
+  path: '/pricing/',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const AppSettingsIndexRoute = AppSettingsIndexRouteImport.update({
-  id: '/settings/',
-  path: '/settings/',
-  getParentRoute: () => AppRouteRoute,
+const InviteTokenRoute = InviteTokenRouteImport.update({
+  id: '/invite/$token',
+  path: '/invite/$token',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const AppNotificationsIndexRoute = AppNotificationsIndexRouteImport.update({
-  id: '/notifications/',
-  path: '/notifications/',
-  getParentRoute: () => AppRouteRoute,
-} as any)
-const AppExploreIndexRoute = AppExploreIndexRouteImport.update({
-  id: '/explore/',
-  path: '/explore/',
+const AppTeamIndexRoute = AppTeamIndexRouteImport.update({
+  id: '/team/',
+  path: '/team/',
   getParentRoute: () => AppRouteRoute,
 } as any)
 const AppDashboardIndexRoute = AppDashboardIndexRouteImport.update({
@@ -62,183 +47,75 @@ const AppDashboardIndexRoute = AppDashboardIndexRouteImport.update({
   path: '/dashboard/',
   getParentRoute: () => AppRouteRoute,
 } as any)
-const AppSettingsProfileRoute = AppSettingsProfileRouteImport.update({
-  id: '/settings/profile',
-  path: '/settings/profile',
+const AppStartupsNewRoute = AppStartupsNewRouteImport.update({
+  id: '/startups/new',
+  path: '/startups/new',
   getParentRoute: () => AppRouteRoute,
 } as any)
-const ApiDodoWebhooksRoute = ApiDodoWebhooksRouteImport.update({
-  id: '/api/dodo/webhooks',
-  path: '/api/dodo/webhooks',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
-  id: '/api/auth/$',
-  path: '/api/auth/$',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AppSettingsBillingIndexRoute = AppSettingsBillingIndexRouteImport.update({
-  id: '/settings/billing/',
-  path: '/settings/billing/',
-  getParentRoute: () => AppRouteRoute,
-} as any)
-const AppExploreStartupsIndexRoute = AppExploreStartupsIndexRouteImport.update({
-  id: '/explore/startups/',
-  path: '/explore/startups/',
-  getParentRoute: () => AppRouteRoute,
-} as any)
-const AppExploreSprintsIndexRoute = AppExploreSprintsIndexRouteImport.update({
-  id: '/explore/sprints/',
-  path: '/explore/sprints/',
-  getParentRoute: () => AppRouteRoute,
-} as any)
-const AppSettingsBillingProRoute = AppSettingsBillingProRouteImport.update({
-  id: '/settings/billing/pro',
-  path: '/settings/billing/pro',
-  getParentRoute: () => AppRouteRoute,
-} as any)
-const AppDashboardStartupNewIndexRoute =
-  AppDashboardStartupNewIndexRouteImport.update({
-    id: '/dashboard/startup/new/',
-    path: '/dashboard/startup/new/',
-    getParentRoute: () => AppRouteRoute,
-  } as any)
-const AppDashboardStartupNewVerifypanRoute =
-  AppDashboardStartupNewVerifypanRouteImport.update({
-    id: '/dashboard/startup/new/verifypan',
-    path: '/dashboard/startup/new/verifypan',
-    getParentRoute: () => AppRouteRoute,
-  } as any)
-const AppDashboardStartupNewConfirmRoute =
-  AppDashboardStartupNewConfirmRouteImport.update({
-    id: '/dashboard/startup/new/confirm',
-    path: '/dashboard/startup/new/confirm',
-    getParentRoute: () => AppRouteRoute,
-  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/app': typeof AppRouteRouteWithChildren
-  '/app/startups': typeof AppStartupsRouteRoute
-  '/api/auth/$': typeof ApiAuthSplatRoute
-  '/api/dodo/webhooks': typeof ApiDodoWebhooksRoute
-  '/app/settings/profile': typeof AppSettingsProfileRoute
+  '/invite/$token': typeof InviteTokenRoute
+  '/pricing': typeof PricingIndexRoute
+  '/app/startups/new': typeof AppStartupsNewRoute
   '/app/dashboard': typeof AppDashboardIndexRoute
-  '/app/explore': typeof AppExploreIndexRoute
-  '/app/notifications': typeof AppNotificationsIndexRoute
-  '/app/settings': typeof AppSettingsIndexRoute
-  '/app/settings/billing/pro': typeof AppSettingsBillingProRoute
-  '/app/explore/sprints': typeof AppExploreSprintsIndexRoute
-  '/app/explore/startups': typeof AppExploreStartupsIndexRoute
-  '/app/settings/billing': typeof AppSettingsBillingIndexRoute
-  '/app/dashboard/startup/new/confirm': typeof AppDashboardStartupNewConfirmRoute
-  '/app/dashboard/startup/new/verifypan': typeof AppDashboardStartupNewVerifypanRoute
-  '/app/dashboard/startup/new': typeof AppDashboardStartupNewIndexRoute
+  '/app/team': typeof AppTeamIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/app': typeof AppRouteRouteWithChildren
-  '/app/startups': typeof AppStartupsRouteRoute
-  '/api/auth/$': typeof ApiAuthSplatRoute
-  '/api/dodo/webhooks': typeof ApiDodoWebhooksRoute
-  '/app/settings/profile': typeof AppSettingsProfileRoute
+  '/invite/$token': typeof InviteTokenRoute
+  '/pricing': typeof PricingIndexRoute
+  '/app/startups/new': typeof AppStartupsNewRoute
   '/app/dashboard': typeof AppDashboardIndexRoute
-  '/app/explore': typeof AppExploreIndexRoute
-  '/app/notifications': typeof AppNotificationsIndexRoute
-  '/app/settings': typeof AppSettingsIndexRoute
-  '/app/settings/billing/pro': typeof AppSettingsBillingProRoute
-  '/app/explore/sprints': typeof AppExploreSprintsIndexRoute
-  '/app/explore/startups': typeof AppExploreStartupsIndexRoute
-  '/app/settings/billing': typeof AppSettingsBillingIndexRoute
-  '/app/dashboard/startup/new/confirm': typeof AppDashboardStartupNewConfirmRoute
-  '/app/dashboard/startup/new/verifypan': typeof AppDashboardStartupNewVerifypanRoute
-  '/app/dashboard/startup/new': typeof AppDashboardStartupNewIndexRoute
+  '/app/team': typeof AppTeamIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/app': typeof AppRouteRouteWithChildren
-  '/app/startups': typeof AppStartupsRouteRoute
-  '/api/auth/$': typeof ApiAuthSplatRoute
-  '/api/dodo/webhooks': typeof ApiDodoWebhooksRoute
-  '/app/settings/profile': typeof AppSettingsProfileRoute
+  '/invite/$token': typeof InviteTokenRoute
+  '/pricing/': typeof PricingIndexRoute
+  '/app/startups/new': typeof AppStartupsNewRoute
   '/app/dashboard/': typeof AppDashboardIndexRoute
-  '/app/explore/': typeof AppExploreIndexRoute
-  '/app/notifications/': typeof AppNotificationsIndexRoute
-  '/app/settings/': typeof AppSettingsIndexRoute
-  '/app/settings/billing/pro': typeof AppSettingsBillingProRoute
-  '/app/explore/sprints/': typeof AppExploreSprintsIndexRoute
-  '/app/explore/startups/': typeof AppExploreStartupsIndexRoute
-  '/app/settings/billing/': typeof AppSettingsBillingIndexRoute
-  '/app/dashboard/startup/new/confirm': typeof AppDashboardStartupNewConfirmRoute
-  '/app/dashboard/startup/new/verifypan': typeof AppDashboardStartupNewVerifypanRoute
-  '/app/dashboard/startup/new/': typeof AppDashboardStartupNewIndexRoute
+  '/app/team/': typeof AppTeamIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/app'
-    | '/app/startups'
-    | '/api/auth/$'
-    | '/api/dodo/webhooks'
-    | '/app/settings/profile'
+    | '/invite/$token'
+    | '/pricing'
+    | '/app/startups/new'
     | '/app/dashboard'
-    | '/app/explore'
-    | '/app/notifications'
-    | '/app/settings'
-    | '/app/settings/billing/pro'
-    | '/app/explore/sprints'
-    | '/app/explore/startups'
-    | '/app/settings/billing'
-    | '/app/dashboard/startup/new/confirm'
-    | '/app/dashboard/startup/new/verifypan'
-    | '/app/dashboard/startup/new'
+    | '/app/team'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/app'
-    | '/app/startups'
-    | '/api/auth/$'
-    | '/api/dodo/webhooks'
-    | '/app/settings/profile'
+    | '/invite/$token'
+    | '/pricing'
+    | '/app/startups/new'
     | '/app/dashboard'
-    | '/app/explore'
-    | '/app/notifications'
-    | '/app/settings'
-    | '/app/settings/billing/pro'
-    | '/app/explore/sprints'
-    | '/app/explore/startups'
-    | '/app/settings/billing'
-    | '/app/dashboard/startup/new/confirm'
-    | '/app/dashboard/startup/new/verifypan'
-    | '/app/dashboard/startup/new'
+    | '/app/team'
   id:
     | '__root__'
     | '/'
     | '/app'
-    | '/app/startups'
-    | '/api/auth/$'
-    | '/api/dodo/webhooks'
-    | '/app/settings/profile'
+    | '/invite/$token'
+    | '/pricing/'
+    | '/app/startups/new'
     | '/app/dashboard/'
-    | '/app/explore/'
-    | '/app/notifications/'
-    | '/app/settings/'
-    | '/app/settings/billing/pro'
-    | '/app/explore/sprints/'
-    | '/app/explore/startups/'
-    | '/app/settings/billing/'
-    | '/app/dashboard/startup/new/confirm'
-    | '/app/dashboard/startup/new/verifypan'
-    | '/app/dashboard/startup/new/'
+    | '/app/team/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AppRouteRoute: typeof AppRouteRouteWithChildren
-  ApiAuthSplatRoute: typeof ApiAuthSplatRoute
-  ApiDodoWebhooksRoute: typeof ApiDodoWebhooksRoute
+  InviteTokenRoute: typeof InviteTokenRoute
+  PricingIndexRoute: typeof PricingIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -257,32 +134,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/app/startups': {
-      id: '/app/startups'
-      path: '/startups'
-      fullPath: '/app/startups'
-      preLoaderRoute: typeof AppStartupsRouteRouteImport
-      parentRoute: typeof AppRouteRoute
+    '/pricing/': {
+      id: '/pricing/'
+      path: '/pricing'
+      fullPath: '/pricing'
+      preLoaderRoute: typeof PricingIndexRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/app/settings/': {
-      id: '/app/settings/'
-      path: '/settings'
-      fullPath: '/app/settings'
-      preLoaderRoute: typeof AppSettingsIndexRouteImport
-      parentRoute: typeof AppRouteRoute
+    '/invite/$token': {
+      id: '/invite/$token'
+      path: '/invite/$token'
+      fullPath: '/invite/$token'
+      preLoaderRoute: typeof InviteTokenRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/app/notifications/': {
-      id: '/app/notifications/'
-      path: '/notifications'
-      fullPath: '/app/notifications'
-      preLoaderRoute: typeof AppNotificationsIndexRouteImport
-      parentRoute: typeof AppRouteRoute
-    }
-    '/app/explore/': {
-      id: '/app/explore/'
-      path: '/explore'
-      fullPath: '/app/explore'
-      preLoaderRoute: typeof AppExploreIndexRouteImport
+    '/app/team/': {
+      id: '/app/team/'
+      path: '/team'
+      fullPath: '/app/team'
+      preLoaderRoute: typeof AppTeamIndexRouteImport
       parentRoute: typeof AppRouteRoute
     }
     '/app/dashboard/': {
@@ -292,109 +162,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppDashboardIndexRouteImport
       parentRoute: typeof AppRouteRoute
     }
-    '/app/settings/profile': {
-      id: '/app/settings/profile'
-      path: '/settings/profile'
-      fullPath: '/app/settings/profile'
-      preLoaderRoute: typeof AppSettingsProfileRouteImport
-      parentRoute: typeof AppRouteRoute
-    }
-    '/api/dodo/webhooks': {
-      id: '/api/dodo/webhooks'
-      path: '/api/dodo/webhooks'
-      fullPath: '/api/dodo/webhooks'
-      preLoaderRoute: typeof ApiDodoWebhooksRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/auth/$': {
-      id: '/api/auth/$'
-      path: '/api/auth/$'
-      fullPath: '/api/auth/$'
-      preLoaderRoute: typeof ApiAuthSplatRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/app/settings/billing/': {
-      id: '/app/settings/billing/'
-      path: '/settings/billing'
-      fullPath: '/app/settings/billing'
-      preLoaderRoute: typeof AppSettingsBillingIndexRouteImport
-      parentRoute: typeof AppRouteRoute
-    }
-    '/app/explore/startups/': {
-      id: '/app/explore/startups/'
-      path: '/explore/startups'
-      fullPath: '/app/explore/startups'
-      preLoaderRoute: typeof AppExploreStartupsIndexRouteImport
-      parentRoute: typeof AppRouteRoute
-    }
-    '/app/explore/sprints/': {
-      id: '/app/explore/sprints/'
-      path: '/explore/sprints'
-      fullPath: '/app/explore/sprints'
-      preLoaderRoute: typeof AppExploreSprintsIndexRouteImport
-      parentRoute: typeof AppRouteRoute
-    }
-    '/app/settings/billing/pro': {
-      id: '/app/settings/billing/pro'
-      path: '/settings/billing/pro'
-      fullPath: '/app/settings/billing/pro'
-      preLoaderRoute: typeof AppSettingsBillingProRouteImport
-      parentRoute: typeof AppRouteRoute
-    }
-    '/app/dashboard/startup/new/': {
-      id: '/app/dashboard/startup/new/'
-      path: '/dashboard/startup/new'
-      fullPath: '/app/dashboard/startup/new'
-      preLoaderRoute: typeof AppDashboardStartupNewIndexRouteImport
-      parentRoute: typeof AppRouteRoute
-    }
-    '/app/dashboard/startup/new/verifypan': {
-      id: '/app/dashboard/startup/new/verifypan'
-      path: '/dashboard/startup/new/verifypan'
-      fullPath: '/app/dashboard/startup/new/verifypan'
-      preLoaderRoute: typeof AppDashboardStartupNewVerifypanRouteImport
-      parentRoute: typeof AppRouteRoute
-    }
-    '/app/dashboard/startup/new/confirm': {
-      id: '/app/dashboard/startup/new/confirm'
-      path: '/dashboard/startup/new/confirm'
-      fullPath: '/app/dashboard/startup/new/confirm'
-      preLoaderRoute: typeof AppDashboardStartupNewConfirmRouteImport
+    '/app/startups/new': {
+      id: '/app/startups/new'
+      path: '/startups/new'
+      fullPath: '/app/startups/new'
+      preLoaderRoute: typeof AppStartupsNewRouteImport
       parentRoute: typeof AppRouteRoute
     }
   }
 }
 
 interface AppRouteRouteChildren {
-  AppStartupsRouteRoute: typeof AppStartupsRouteRoute
-  AppSettingsProfileRoute: typeof AppSettingsProfileRoute
+  AppStartupsNewRoute: typeof AppStartupsNewRoute
   AppDashboardIndexRoute: typeof AppDashboardIndexRoute
-  AppExploreIndexRoute: typeof AppExploreIndexRoute
-  AppNotificationsIndexRoute: typeof AppNotificationsIndexRoute
-  AppSettingsIndexRoute: typeof AppSettingsIndexRoute
-  AppSettingsBillingProRoute: typeof AppSettingsBillingProRoute
-  AppExploreSprintsIndexRoute: typeof AppExploreSprintsIndexRoute
-  AppExploreStartupsIndexRoute: typeof AppExploreStartupsIndexRoute
-  AppSettingsBillingIndexRoute: typeof AppSettingsBillingIndexRoute
-  AppDashboardStartupNewConfirmRoute: typeof AppDashboardStartupNewConfirmRoute
-  AppDashboardStartupNewVerifypanRoute: typeof AppDashboardStartupNewVerifypanRoute
-  AppDashboardStartupNewIndexRoute: typeof AppDashboardStartupNewIndexRoute
+  AppTeamIndexRoute: typeof AppTeamIndexRoute
 }
 
 const AppRouteRouteChildren: AppRouteRouteChildren = {
-  AppStartupsRouteRoute: AppStartupsRouteRoute,
-  AppSettingsProfileRoute: AppSettingsProfileRoute,
+  AppStartupsNewRoute: AppStartupsNewRoute,
   AppDashboardIndexRoute: AppDashboardIndexRoute,
-  AppExploreIndexRoute: AppExploreIndexRoute,
-  AppNotificationsIndexRoute: AppNotificationsIndexRoute,
-  AppSettingsIndexRoute: AppSettingsIndexRoute,
-  AppSettingsBillingProRoute: AppSettingsBillingProRoute,
-  AppExploreSprintsIndexRoute: AppExploreSprintsIndexRoute,
-  AppExploreStartupsIndexRoute: AppExploreStartupsIndexRoute,
-  AppSettingsBillingIndexRoute: AppSettingsBillingIndexRoute,
-  AppDashboardStartupNewConfirmRoute: AppDashboardStartupNewConfirmRoute,
-  AppDashboardStartupNewVerifypanRoute: AppDashboardStartupNewVerifypanRoute,
-  AppDashboardStartupNewIndexRoute: AppDashboardStartupNewIndexRoute,
+  AppTeamIndexRoute: AppTeamIndexRoute,
 }
 
 const AppRouteRouteWithChildren = AppRouteRoute._addFileChildren(
@@ -404,8 +191,8 @@ const AppRouteRouteWithChildren = AppRouteRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AppRouteRoute: AppRouteRouteWithChildren,
-  ApiAuthSplatRoute: ApiAuthSplatRoute,
-  ApiDodoWebhooksRoute: ApiDodoWebhooksRoute,
+  InviteTokenRoute: InviteTokenRoute,
+  PricingIndexRoute: PricingIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

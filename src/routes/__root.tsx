@@ -1,12 +1,12 @@
 /// <reference types="vite/client" />
-import type { QueryClient } from "@tanstack/react-query";
 import {
-	createRootRouteWithContext,
+	createRootRoute,
 	HeadContent,
 	Outlet,
 	Scripts,
 } from "@tanstack/react-router";
 import { GlobalSpinner } from "~/components/globals/GlobalSpinner";
+import { AppProviders } from "~/features/auth/providers/AppProviders";
 import { Toaster } from "~/components/ui/sonner";
 import appCss from "~/styles/globals.css?url";
 
@@ -53,9 +53,11 @@ function headTags() {
 }
 function RootComponent() {
 	return (
-		<RootDocument>
-			<Outlet />
-		</RootDocument>
+		<AppProviders>
+			<RootDocument>
+				<Outlet />
+			</RootDocument>
+		</AppProviders>
 	);
 }
 
@@ -73,7 +75,7 @@ function RootDocument({ children }: { readonly children: React.ReactNode }) {
 		</html>
 	);
 }
-export const Route = createRootRouteWithContext<{ qc: QueryClient }>()({
+export const Route = createRootRoute({
 	head: headTags,
 	component: RootComponent,
 	pendingComponent: GlobalSpinner,
