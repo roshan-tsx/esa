@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { api } from "@convex/_generated/api";
+import { useWorkspace } from "~/features/app/hooks/useWorkspace";
 
 function MemberList({
 	members,
@@ -45,7 +46,7 @@ function MemberList({
 }
 
 export function TeamPage() {
-	const startup = useQuery(api.startups.getMine);
+	const { active: startup, isLoading: workspaceLoading } = useWorkspace();
 	const members = useQuery(
 		api.invitations.listMembers,
 		startup?.startup._id ? { startupId: startup.startup._id } : "skip",
@@ -58,27 +59,22 @@ export function TeamPage() {
 
 	const [email, setEmail] = useState("");
 	const [isPending, setIsPending] = useState(false);
-	const [lastInviteLink, setLastInviteLink] = useState<string | null>(null);
 
 	async function handleInvite(event: React.FormEvent) {
 		event.preventDefault();
 		if (!startup?.startup._id) return;
 
+		const trimmedEmail = email.trim();
 		setIsPending(true);
 		try {
-			const result = await createInvite({
+			await createInvite({
 				startupId: startup.startup._id,
-				email,
+				email: trimmedEmail,
 				role: "member",
 			});
 
-			if (result.token) {
-				const link = `${window.location.origin}/invite/${result.token}`;
-				setLastInviteLink(link);
-			}
-
 			setEmail("");
-			toast.success("Invite created");
+			toast.success(`Invite sent to ${trimmedEmail}`);
 		} catch (error) {
 			const message =
 				error instanceof Error ? error.message : "Failed to create invite";
@@ -88,7 +84,7 @@ export function TeamPage() {
 		}
 	}
 
-	if (startup === undefined) {
+	if (workspaceLoading) {
 		return <PageLoading />;
 	}
 
@@ -152,13 +148,6 @@ export function TeamPage() {
 										{isPending ? "Sending..." : "Send invite"}
 									</Button>
 								</form>
-
-								{lastInviteLink && (
-									<div className="rounded-xl border border-border/60 bg-muted/30 p-4 text-sm break-all">
-										<p className="mb-1 font-medium">Invite link</p>
-										<p className="text-muted-foreground">{lastInviteLink}</p>
-									</div>
-								)}
 							</CardContent>
 						</Card>
 

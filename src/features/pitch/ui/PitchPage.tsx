@@ -10,6 +10,7 @@ import { Label } from "~/components/ui/label";
 import { Textarea } from "~/components/ui/textarea";
 import { cn } from "~/lib/utils";
 import { api } from "@convex/_generated/api";
+import { useWorkspace } from "~/features/app/hooks/useWorkspace";
 import type { Doc } from "@convex/_generated/dataModel";
 
 type PitchEditorProps = {
@@ -314,9 +315,9 @@ function PitchEditor({ startup }: PitchEditorProps) {
 }
 
 export function PitchPage() {
-	const startup = useQuery(api.startups.getMine);
+	const { active: startup, isLoading } = useWorkspace();
 
-	if (startup === undefined) {
+	if (isLoading) {
 		return <PageLoading />;
 	}
 

@@ -10,15 +10,16 @@ import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { Textarea } from "~/components/ui/textarea";
 import { api } from "@convex/_generated/api";
+import { useWorkspace } from "~/features/app/hooks/useWorkspace";
 
 export function SprintsPage() {
-	const startup = useQuery(api.startups.getMine);
+	const { active: startup, isLoading } = useWorkspace();
 	const sprints = useQuery(
 		api.sprints.listMine,
 		startup?.startup._id ? { startupId: startup.startup._id } : "skip",
 	);
 
-	if (startup === undefined) {
+	if (isLoading) {
 		return <PageLoading />;
 	}
 
@@ -110,7 +111,7 @@ export function SprintsPage() {
 
 export function CreateSprintPage() {
 	const navigate = useNavigate();
-	const startup = useQuery(api.startups.getMine);
+	const { active: startup, isLoading } = useWorkspace();
 	const createSprint = useMutation(api.sprints.create);
 	const [title, setTitle] = useState("");
 	const [description, setDescription] = useState("");
@@ -157,7 +158,7 @@ export function CreateSprintPage() {
 		}
 	}
 
-	if (startup === undefined) return <PageLoading />;
+	if (isLoading) return <PageLoading />;
 
 	if (!startup || startup.role !== "founder") {
 		return (

@@ -14,6 +14,7 @@ export default defineSchema({
 		isAnonymous: v.optional(v.boolean()),
 		planTier: v.optional(v.union(v.literal("free"), v.literal("pro"))),
 		totalScore: v.optional(v.number()),
+		activeStartupId: v.optional(v.id("startups")),
 	})
 		.index("email", ["email"])
 		.index("phone", ["phone"]),
@@ -146,6 +147,7 @@ export default defineSchema({
 		expiresAt: v.number(),
 	})
 		.index("by_token", ["token"])
+		.index("by_email", ["email"])
 		.index("by_startupId_and_email", ["startupId", "email"])
 		.index("by_startupId", ["startupId"]),
 });

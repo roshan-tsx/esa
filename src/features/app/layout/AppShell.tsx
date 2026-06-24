@@ -11,6 +11,8 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
+import { NotificationBell } from "~/features/app/ui/NotificationBell";
+import { StartupSwitcher } from "~/features/app/ui/StartupSwitcher";
 import { cn } from "~/lib/utils";
 import { api } from "@convex/_generated/api";
 
@@ -55,12 +57,15 @@ export function AppShell({ children }: { readonly children: React.ReactNode }) {
 		<div className="flex min-h-dvh flex-col bg-background text-foreground">
 			<header className="sticky top-0 z-50 border-b border-border bg-background">
 				<div className="flex h-16 items-center justify-between gap-4 px-4 sm:px-6">
-					<Link
-						to="/app/dashboard"
-						className="text-xl font-semibold tracking-tight sm:text-2xl"
-					>
-						Engin
-					</Link>
+					<div className="flex min-w-0 items-center gap-2 sm:gap-3">
+						<Link
+							to="/app/dashboard"
+							className="shrink-0 text-xl font-semibold tracking-tight sm:text-2xl"
+						>
+							Engin
+						</Link>
+						<StartupSwitcher />
+					</div>
 
 					<div className="flex items-center gap-2 sm:gap-3">
 						{me && (
@@ -71,6 +76,8 @@ export function AppShell({ children }: { readonly children: React.ReactNode }) {
 								{me.totalScore} pts
 							</Link>
 						)}
+
+						<NotificationBell />
 
 						<DropdownMenu>
 							<DropdownMenuTrigger asChild>

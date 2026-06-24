@@ -10,6 +10,7 @@ import { Card, CardContent } from "~/components/ui/card";
 import { Input } from "~/components/ui/input";
 import { api } from "@convex/_generated/api";
 import type { Id } from "@convex/_generated/dataModel";
+import { useWorkspace } from "~/features/app/hooks/useWorkspace";
 
 function initials(name: string | null, email: string | null) {
 	const source = name ?? email ?? "?";
@@ -24,15 +25,21 @@ function initials(name: string | null, email: string | null) {
 function EmptyDashboard() {
 	return (
 		<div className="mx-auto flex w-full max-w-xl flex-col items-center py-16 text-center">
-			<h1 className="text-2xl font-bold sm:text-3xl">Create your startup</h1>
+			<h1 className="text-2xl font-bold sm:text-3xl">Create a startup</h1>
 			<p className="mt-3 text-muted-foreground">
-				Set up your workspace to unlock tasks, pitch deck, team invites, and
-				hiring sprints.
+				Add a workspace to manage tasks, pitch deck, team invites, and hiring
+				sprints. Switch between startups anytime from the top bar.
 			</p>
 			<ol className="mt-8 w-full space-y-2 text-left text-sm text-muted-foreground">
-				<li className="rounded-lg border px-4 py-3">1. Create your startup workspace</li>
-				<li className="rounded-lg border px-4 py-3">2. Invite your team and ship tasks</li>
-				<li className="rounded-lg border px-4 py-3">3. Publish your pitch and post hiring sprints</li>
+				<li className="rounded-lg border px-4 py-3">
+					1. Create your startup workspace
+				</li>
+				<li className="rounded-lg border px-4 py-3">
+					2. Invite your team and ship tasks
+				</li>
+				<li className="rounded-lg border px-4 py-3">
+					3. Publish your pitch and post hiring sprints
+				</li>
 			</ol>
 			<Button asChild size="lg" className="mt-8">
 				<Link to="/app/startups/new">Create startup</Link>
@@ -43,7 +50,7 @@ function EmptyDashboard() {
 
 function FounderHub() {
 	const me = useQuery(api.users.getMe);
-	const startup = useQuery(api.startups.getMine);
+	const { active: startup, isLoading: workspaceLoading } = useWorkspace();
 	const members = useQuery(
 		api.invitations.listMembers,
 		startup?.startup._id ? { startupId: startup.startup._id } : "skip",
@@ -61,14 +68,13 @@ function FounderHub() {
 	const [isCreating, setIsCreating] = useState(false);
 	const [pendingIds, setPendingIds] = useState<Set<Id<"tasks">>>(new Set());
 
-	if (!startup || me === undefined) {
+	if (!startup || me === undefined || workspaceLoading) {
 		return <PageLoading />;
 	}
 
 	const isFounder = startup.role === "founder";
 	const s = startup.startup;
-	const openTasks =
-		tasks?.filter((t) => t.status !== "done").slice(0, 5) ?? [];
+	const openTasks = tasks?.filter((t) => t.status !== "done").slice(0, 5) ?? [];
 	const todoCount = tasks?.filter((t) => t.status === "todo").length ?? 0;
 	const activeCount =
 		tasks?.filter((t) => t.status === "in_progress").length ?? 0;
@@ -297,35 +303,19 @@ function FounderHub() {
 
 				{(tasks?.length ?? 0) > 5 && (
 					<p className="text-center text-sm text-muted-foreground">
-						Showing 5 open tasks · {(tasks?.length ?? 0) - openTasks.length} more
-						completed or hidden
+						Showing 5 open tasks · {(tasks?.length ?? 0) - openTasks.length}{" "}
+						more completed or hidden
 					</p>
 				)}
 			</section>
-
-			{me?.planTier === "free" && isFounder && (
-				<Card className="shadow-none">
-					<CardContent className="flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between">
-						<div>
-							<p className="font-medium">Upgrade to Pro</p>
-							<p className="text-sm text-muted-foreground">
-								Unlimited sprint applications, hiring chat, and direct hire.
-							</p>
-						</div>
-						<Button asChild variant="outline">
-							<Link to="/pricing">See pricing</Link>
-						</Button>
-					</CardContent>
-				</Card>
-			)}
 		</div>
 	);
 }
 
 export function DashboardPage() {
-	const startup = useQuery(api.startups.getMine);
+	const { active: startup, isLoading } = useWorkspace();
 
-	if (startup === undefined) {
+	if (isLoading) {
 		return <PageLoading />;
 	}
 

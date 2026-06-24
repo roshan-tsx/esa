@@ -11,12 +11,12 @@ export function LandingPage() {
 	}
 
 	return (
-		<div className="flex min-h-dvh flex-col bg-background text-foreground">
+		<div className="flex min-h-dvh flex-col ">
 			<div className="flex flex-1 flex-col items-center justify-center gap-12 px-6 py-10 sm:flex-row sm:gap-16 sm:px-10">
 				<div className="flex shrink-0 justify-center sm:flex-1 sm:justify-end">
 					<GitPullRequestArrow
 						className="size-28 text-primary sm:size-36"
-						strokeWidth={1.5}
+						strokeWidth={2}
 						aria-hidden
 					/>
 				</div>

@@ -1,5 +1,5 @@
 import { v } from "convex/values";
-import type { Id } from "./_generated/dataModel";
+import type { Doc, Id } from "./_generated/dataModel";
 import {
 	type MutationCtx,
 	type QueryCtx,
@@ -113,7 +113,7 @@ export const createInvite = mutation({
 			.first();
 
 		if (existingInvite?.status === "pending") {
-			return { inviteId: existingInvite._id, token: existingInvite.token };
+			return { inviteId: existingInvite._id };
 		}
 
 		const inviteId = await ctx.db.insert("invites", {
@@ -126,8 +126,45 @@ export const createInvite = mutation({
 			expiresAt: Date.now() + INVITE_TTL_MS,
 		});
 
-		const invite = await ctx.db.get(inviteId);
-		return { inviteId, token: invite?.token };
+		return { inviteId };
+	},
+});
+
+export const listMyPendingInvites = query({
+	args: {},
+	handler: async (ctx) => {
+		const userId = await requireUserId(ctx);
+		const user = await ctx.db.get(userId);
+		if (!user?.email) {
+			return [];
+		}
+
+		const email = user.email.toLowerCase();
+		const now = Date.now();
+
+		const invites = await ctx.db
+			.query("invites")
+			.withIndex("by_email", (q) => q.eq("email", email))
+			.take(50);
+
+		const pending = invites.filter(
+			(invite) => invite.status === "pending" && invite.expiresAt > now,
+		);
+
+		const results = [];
+		for (const invite of pending) {
+			const startup = await ctx.db.get(invite.startupId);
+			const inviter = await ctx.db.get(invite.invitedByUserId);
+			results.push({
+				_id: invite._id,
+				role: invite.role,
+				expiresAt: invite.expiresAt,
+				startupName: startup?.name ?? "Unknown startup",
+				inviterName: inviter?.name ?? inviter?.email ?? "Someone",
+			});
+		}
+
+		return results;
 	},
 });
 
@@ -166,36 +203,69 @@ export const acceptInvite = mutation({
 			throw new Error("Invite not found");
 		}
 
-		if (invite.status !== "pending") {
-			throw new Error("Invite is no longer valid");
+		return await acceptInviteRecord(ctx, invite, userId, user.email);
+	},
+});
+
+export const acceptInviteById = mutation({
+	args: { inviteId: v.id("invites") },
+	handler: async (ctx, args) => {
+		const userId = await requireUserId(ctx);
+		const user = await ctx.db.get(userId);
+		if (!user?.email) {
+			throw new Error("Your account needs an email to accept invites");
 		}
 
-		if (invite.expiresAt < Date.now()) {
-			await ctx.db.patch(invite._id, { status: "expired" });
-			throw new Error("Invite has expired");
+		const invite = await ctx.db.get(args.inviteId);
+		if (!invite) {
+			throw new Error("Invite not found");
 		}
 
 		if (invite.email !== user.email.toLowerCase()) {
 			throw new Error("This invite was sent to a different email");
 		}
 
-		const existingMembership = await ctx.db
-			.query("memberships")
-			.withIndex("by_startupId_and_userId", (q) =>
-				q.eq("startupId", invite.startupId).eq("userId", userId),
-			)
-			.unique();
-
-		if (!existingMembership) {
-			await ctx.db.insert("memberships", {
-				startupId: invite.startupId,
-				userId,
-				role: invite.role,
-			});
-		}
-
-		await ctx.db.patch(invite._id, { status: "accepted" });
-
-		return { startupId: invite.startupId };
+		return await acceptInviteRecord(ctx, invite, userId, user.email);
 	},
 });
+
+async function acceptInviteRecord(
+	ctx: MutationCtx,
+	invite: Doc<"invites">,
+	userId: Id<"users">,
+	userEmail: string,
+) {
+	if (invite.status !== "pending") {
+		throw new Error("Invite is no longer valid");
+	}
+
+	if (invite.expiresAt < Date.now()) {
+		await ctx.db.patch(invite._id, { status: "expired" });
+		throw new Error("Invite has expired");
+	}
+
+	if (invite.email !== userEmail.toLowerCase()) {
+		throw new Error("This invite was sent to a different email");
+	}
+
+	const existingMembership = await ctx.db
+		.query("memberships")
+		.withIndex("by_startupId_and_userId", (q) =>
+			q.eq("startupId", invite.startupId).eq("userId", userId),
+		)
+		.unique();
+
+	if (!existingMembership) {
+		await ctx.db.insert("memberships", {
+			startupId: invite.startupId,
+			userId,
+			role: invite.role,
+		});
+	}
+
+	await ctx.db.patch(invite._id, { status: "accepted" });
+
+	await ctx.db.patch(userId, { activeStartupId: invite.startupId });
+
+	return { startupId: invite.startupId };
+}

@@ -1,10 +1,62 @@
 import { getAuthUserId } from "@convex-dev/auth/server";
 import { v } from "convex/values";
+import type { Doc, Id } from "./_generated/dataModel";
+import type { QueryCtx } from "./_generated/server";
 import { mutation, query } from "./_generated/server";
 import { requireUserId } from "./lib/auth";
 import {
 	requireFounderMembership,
+	requireMembership,
 } from "./lib/membership";
+
+type StartupEntry = {
+	startup: Doc<"startups">;
+	role: "founder" | "member";
+};
+
+async function loadUserStartups(
+	ctx: { db: QueryCtx["db"] },
+	userId: Id<"users">,
+): Promise<StartupEntry[]> {
+	const memberships = await ctx.db
+		.query("memberships")
+		.withIndex("by_userId", (q) => q.eq("userId", userId))
+		.take(50);
+
+	const entries: StartupEntry[] = [];
+	for (const membership of memberships) {
+		const startup = await ctx.db.get(membership.startupId);
+		if (startup) {
+			entries.push({ startup, role: membership.role });
+		}
+	}
+
+	entries.sort((a, b) => a.startup.name.localeCompare(b.startup.name));
+	return entries;
+}
+
+async function resolveWorkspace(
+	ctx: { db: QueryCtx["db"] },
+	userId: Id<"users">,
+	user: Doc<"users"> | null,
+) {
+	const startups = await loadUserStartups(ctx, userId);
+
+	if (startups.length === 0) {
+		return { active: null, startups: [] as StartupEntry[] };
+	}
+
+	let active =
+		user?.activeStartupId != null
+			? (startups.find((s) => s.startup._id === user.activeStartupId) ?? null)
+			: null;
+
+	if (!active) {
+		active = startups[0];
+	}
+
+	return { active, startups };
+}
 
 function slugify(name: string): string {
 	return name
@@ -23,15 +75,6 @@ export const create = mutation({
 	},
 	handler: async (ctx, args) => {
 		const userId = await requireUserId(ctx);
-
-		const existingStartup = await ctx.db
-			.query("startups")
-			.withIndex("by_founderUserId", (q) => q.eq("founderUserId", userId))
-			.first();
-
-		if (existingStartup) {
-			throw new Error("You already have a startup");
-		}
 
 		const baseSlug = slugify(args.name) || "startup";
 		let slug = baseSlug;
@@ -66,33 +109,39 @@ export const create = mutation({
 			role: "founder",
 		});
 
+		await ctx.db.patch(userId, { activeStartupId: startupId });
+
 		return { startupId, slug };
 	},
 });
 
+export const getWorkspace = query({
+	args: {},
+	handler: async (ctx) => {
+		const userId = await requireUserId(ctx);
+		const user = await ctx.db.get(userId);
+		return await resolveWorkspace(ctx, userId, user);
+	},
+});
+
+export const setActive = mutation({
+	args: { startupId: v.id("startups") },
+	handler: async (ctx, args) => {
+		const userId = await requireUserId(ctx);
+		await requireMembership(ctx, args.startupId, userId);
+		await ctx.db.patch(userId, { activeStartupId: args.startupId });
+		return args.startupId;
+	},
+});
+
+/** @deprecated Use getWorkspace — returns the active startup only */
 export const getMine = query({
 	args: {},
 	handler: async (ctx) => {
 		const userId = await requireUserId(ctx);
-
-		const membership = await ctx.db
-			.query("memberships")
-			.withIndex("by_userId", (q) => q.eq("userId", userId))
-			.first();
-
-		if (!membership) {
-			return null;
-		}
-
-		const startup = await ctx.db.get(membership.startupId);
-		if (!startup) {
-			return null;
-		}
-
-		return {
-			startup,
-			role: membership.role,
-		};
+		const user = await ctx.db.get(userId);
+		const { active } = await resolveWorkspace(ctx, userId, user);
+		return active;
 	},
 });
 

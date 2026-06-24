@@ -1,14 +1,13 @@
 import { Link } from "@tanstack/react-router";
-import { useQuery } from "convex/react";
 import { PageLoading } from "~/components/shared/PageLoading";
 import { Button } from "~/components/ui/button";
 import { Card, CardContent } from "~/components/ui/card";
-import { api } from "@convex/_generated/api";
+import { useWorkspace } from "~/features/app/hooks/useWorkspace";
 
 export function StartupPage() {
-	const startup = useQuery(api.startups.getMine);
+	const { active: startup, isLoading } = useWorkspace();
 
-	if (startup === undefined) {
+	if (isLoading) {
 		return <PageLoading />;
 	}
 

@@ -1,0 +1,21 @@
+import { useMutation, useQuery } from "convex/react";
+import { api } from "@convex/_generated/api";
+import type { Id } from "@convex/_generated/dataModel";
+
+export function useWorkspace() {
+	const workspace = useQuery(api.startups.getWorkspace);
+	const setActive = useMutation(api.startups.setActive);
+
+	const active = workspace?.active ?? null;
+	const startups = workspace?.startups ?? [];
+
+	return {
+		workspace,
+		active,
+		startups,
+		isLoading: workspace === undefined,
+		hasStartups: startups.length > 0,
+		setActiveStartup: (startupId: Id<"startups">) =>
+			setActive({ startupId }),
+	};
+}
