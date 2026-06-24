@@ -1,7 +1,7 @@
 import { getAuthUserId } from "@convex-dev/auth/server";
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
-import { requireUserId } from "./lib/auth";
+import { requireUserId, initUserProfile } from "./lib/auth";
 
 export const getMe = query({
 	args: {},
@@ -22,6 +22,7 @@ export const getMe = query({
 			email: user.email ?? null,
 			image: user.image ?? null,
 			planTier: user.planTier ?? "free",
+			totalScore: user.totalScore ?? 0,
 		};
 	},
 });
@@ -30,15 +31,7 @@ export const ensureProfile = mutation({
 	args: {},
 	handler: async (ctx) => {
 		const userId = await requireUserId(ctx);
-		const user = await ctx.db.get(userId);
-		if (!user) {
-			throw new Error("User not found");
-		}
-
-		if (!user.planTier) {
-			await ctx.db.patch(userId, { planTier: "free" });
-		}
-
+		await initUserProfile(ctx, userId);
 		return userId;
 	},
 });

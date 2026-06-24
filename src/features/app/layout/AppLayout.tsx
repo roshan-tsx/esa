@@ -1,6 +1,7 @@
 import { useConvexAuth } from "@convex-dev/auth/react";
 import { Navigate, Outlet } from "@tanstack/react-router";
 import { GlobalSpinner } from "~/components/globals/GlobalSpinner";
+import { AppShell } from "./AppShell";
 
 export function AppLayout() {
 	const { isLoading, isAuthenticated } = useConvexAuth();
@@ -13,5 +14,9 @@ export function AppLayout() {
 		return <Navigate to="/" />;
 	}
 
-	return <Outlet />;
+	return (
+		<AppShell>
+			<Outlet />
+		</AppShell>
+	);
 }

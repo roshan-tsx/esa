@@ -1,14 +1,17 @@
 import { useAuthActions } from "@convex-dev/auth/react";
 import { useNavigate } from "@tanstack/react-router";
+import { useMutation } from "convex/react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
+import { api } from "@convex/_generated/api";
 
 export function EmailAuthForm() {
 	const { signIn } = useAuthActions();
 	const navigate = useNavigate();
+	const ensureProfile = useMutation(api.users.ensureProfile);
 	const [mode, setMode] = useState<"signIn" | "signUp">("signIn");
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
@@ -29,6 +32,7 @@ export function EmailAuthForm() {
 			}
 
 			await signIn("password", formData);
+			await ensureProfile();
 			toast.success(mode === "signUp" ? "Account created" : "Signed in");
 			await navigate({ to: "/app/dashboard" });
 		} catch (error) {

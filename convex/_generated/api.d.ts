@@ -12,10 +12,16 @@ import type * as auth from "../auth.js";
 import type * as billing from "../billing.js";
 import type * as billingActions from "../billingActions.js";
 import type * as billingWebhook from "../billingWebhook.js";
+import type * as explore from "../explore.js";
 import type * as http from "../http.js";
 import type * as invitations from "../invitations.js";
 import type * as lib_auth from "../lib/auth.js";
+import type * as lib_membership from "../lib/membership.js";
+import type * as lib_time from "../lib/time.js";
+import type * as scores from "../scores.js";
+import type * as sprints from "../sprints.js";
 import type * as startups from "../startups.js";
+import type * as tasks from "../tasks.js";
 import type * as users from "../users.js";
 
 import type {
@@ -29,10 +35,16 @@ declare const fullApi: ApiFromModules<{
   billing: typeof billing;
   billingActions: typeof billingActions;
   billingWebhook: typeof billingWebhook;
+  explore: typeof explore;
   http: typeof http;
   invitations: typeof invitations;
   "lib/auth": typeof lib_auth;
+  "lib/membership": typeof lib_membership;
+  "lib/time": typeof lib_time;
+  scores: typeof scores;
+  sprints: typeof sprints;
   startups: typeof startups;
+  tasks: typeof tasks;
   users: typeof users;
 }>;
 

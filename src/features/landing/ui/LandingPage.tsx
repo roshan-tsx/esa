@@ -1,30 +1,38 @@
+import { useConvexAuth } from "@convex-dev/auth/react";
+import { Navigate } from "@tanstack/react-router";
 import { GitPullRequestArrow } from "lucide-react";
-import { EmailAuthForm } from "~/features/auth/ui/EmailAuthForm";
 import { GoogleButton } from "~/features/auth/ui/GoogleButton";
 
 export function LandingPage() {
-	return (
-		<div className="min-h-screen flex bg-background items-center text-foreground p-10 justify-around gap-10">
-			<section className="flex justify-center border-r pr-10">
-				<GitPullRequestArrow
-					className="size-32 text-primary sm:size-40"
-					strokeWidth={2}
-				/>
-			</section>
+	const { isAuthenticated, isLoading } = useConvexAuth();
 
-			<section className="flex w-full max-w-md flex-1 flex-col gap-8">
-				<h1 className="text-4xl font-bold leading-tight tracking-tight sm:text-5xl">
-					The Fast Lane For Founders
-				</h1>
-				<div className="flex flex-col gap-4">
-					<GoogleButton />
-					<div className="relative text-center text-sm text-muted-foreground">
-						<span className="bg-background px-2 relative z-10">or</span>
-						<div className="absolute inset-x-0 top-1/2 border-t" />
-					</div>
-					<EmailAuthForm />
+	if (!isLoading && isAuthenticated) {
+		return <Navigate to="/app/dashboard" />;
+	}
+
+	return (
+		<div className="flex min-h-dvh flex-col bg-background text-foreground">
+			<div className="flex flex-1 flex-col items-center justify-center gap-12 px-6 py-10 sm:flex-row sm:gap-16 sm:px-10">
+				<div className="flex shrink-0 justify-center sm:flex-1 sm:justify-end">
+					<GitPullRequestArrow
+						className="size-28 text-primary sm:size-36"
+						strokeWidth={1.5}
+						aria-hidden
+					/>
 				</div>
-			</section>
+
+				<div className="flex w-full max-w-sm flex-col sm:flex-1 sm:max-w-md">
+					<h1 className="text-4xl font-bold leading-[1.08] tracking-tight sm:text-5xl">
+						The fast lane for founders
+					</h1>
+					<p className="mt-3 text-lg font-medium text-primary">
+						Move the needle.
+					</p>
+					<div className="mt-10 w-full max-w-xs">
+						<GoogleButton />
+					</div>
+				</div>
+			</div>
 		</div>
 	);
 }

@@ -1,13 +1,15 @@
 import { useAuthActions } from "@convex-dev/auth/react";
 import { useNavigate } from "@tanstack/react-router";
+import { useMutation } from "convex/react";
 import { useState } from "react";
 import { FaGoogle } from "react-icons/fa";
 import { toast } from "sonner";
-import { Button } from "~/components/ui/button";
+import { api } from "@convex/_generated/api";
 
 export function GoogleButton() {
 	const { signIn } = useAuthActions();
 	const navigate = useNavigate();
+	const ensureProfile = useMutation(api.users.ensureProfile);
 	const [isPending, setIsPending] = useState(false);
 
 	async function handleGoogleSignIn() {
@@ -22,6 +24,7 @@ export function GoogleButton() {
 			}
 
 			if (result.signingIn) {
+				await ensureProfile();
 				await navigate({ to: "/app/dashboard" });
 			}
 		} catch (error) {
@@ -46,15 +49,14 @@ export function GoogleButton() {
 	}
 
 	return (
-		<Button
-			variant="secondary"
-			className="w-full rounded-full gap-2 items-center justify-center"
+		<button
 			type="button"
 			disabled={isPending}
 			onClick={handleGoogleSignIn}
+			className="flex h-11 w-full items-center justify-center gap-3 rounded-full border border-[#dadce0] bg-white px-4 text-sm font-medium text-[#3c4043] shadow-sm transition-colors hover:bg-[#f8f9fa] disabled:opacity-60"
 		>
 			<FaGoogle className="size-4" />
 			{isPending ? "Signing in..." : "Sign in with Google"}
-		</Button>
+		</button>
 	);
 }

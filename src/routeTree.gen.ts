@@ -12,10 +12,20 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as AppRouteRouteImport } from './routes/app/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PricingIndexRouteImport } from './routes/pricing/index'
+import { Route as ExploreIndexRouteImport } from './routes/explore/index'
+import { Route as AppIndexRouteImport } from './routes/app/index'
+import { Route as SSlugRouteImport } from './routes/s/$slug'
 import { Route as InviteTokenRouteImport } from './routes/invite/$token'
 import { Route as AppTeamIndexRouteImport } from './routes/app/team/index'
+import { Route as AppStartupIndexRouteImport } from './routes/app/startup/index'
+import { Route as AppSprintsIndexRouteImport } from './routes/app/sprints/index'
+import { Route as AppScoresIndexRouteImport } from './routes/app/scores/index'
+import { Route as AppPitchIndexRouteImport } from './routes/app/pitch/index'
+import { Route as AppExploreIndexRouteImport } from './routes/app/explore/index'
 import { Route as AppDashboardIndexRouteImport } from './routes/app/dashboard/index'
 import { Route as AppStartupsNewRouteImport } from './routes/app/startups/new'
+import { Route as AppSprintsNewRouteImport } from './routes/app/sprints/new'
+import { Route as AppSprintsSprintIdRouteImport } from './routes/app/sprints/$sprintId'
 
 const AppRouteRoute = AppRouteRouteImport.update({
   id: '/app',
@@ -32,6 +42,21 @@ const PricingIndexRoute = PricingIndexRouteImport.update({
   path: '/pricing/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ExploreIndexRoute = ExploreIndexRouteImport.update({
+  id: '/explore/',
+  path: '/explore/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppIndexRoute = AppIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const SSlugRoute = SSlugRouteImport.update({
+  id: '/s/$slug',
+  path: '/s/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const InviteTokenRoute = InviteTokenRouteImport.update({
   id: '/invite/$token',
   path: '/invite/$token',
@@ -40,6 +65,31 @@ const InviteTokenRoute = InviteTokenRouteImport.update({
 const AppTeamIndexRoute = AppTeamIndexRouteImport.update({
   id: '/team/',
   path: '/team/',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppStartupIndexRoute = AppStartupIndexRouteImport.update({
+  id: '/startup/',
+  path: '/startup/',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppSprintsIndexRoute = AppSprintsIndexRouteImport.update({
+  id: '/sprints/',
+  path: '/sprints/',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppScoresIndexRoute = AppScoresIndexRouteImport.update({
+  id: '/scores/',
+  path: '/scores/',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppPitchIndexRoute = AppPitchIndexRouteImport.update({
+  id: '/pitch/',
+  path: '/pitch/',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppExploreIndexRoute = AppExploreIndexRouteImport.update({
+  id: '/explore/',
+  path: '/explore/',
   getParentRoute: () => AppRouteRoute,
 } as any)
 const AppDashboardIndexRoute = AppDashboardIndexRouteImport.update({
@@ -52,23 +102,52 @@ const AppStartupsNewRoute = AppStartupsNewRouteImport.update({
   path: '/startups/new',
   getParentRoute: () => AppRouteRoute,
 } as any)
+const AppSprintsNewRoute = AppSprintsNewRouteImport.update({
+  id: '/sprints/new',
+  path: '/sprints/new',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppSprintsSprintIdRoute = AppSprintsSprintIdRouteImport.update({
+  id: '/sprints/$sprintId',
+  path: '/sprints/$sprintId',
+  getParentRoute: () => AppRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/app': typeof AppRouteRouteWithChildren
   '/invite/$token': typeof InviteTokenRoute
+  '/s/$slug': typeof SSlugRoute
+  '/app/': typeof AppIndexRoute
+  '/explore': typeof ExploreIndexRoute
   '/pricing': typeof PricingIndexRoute
+  '/app/sprints/$sprintId': typeof AppSprintsSprintIdRoute
+  '/app/sprints/new': typeof AppSprintsNewRoute
   '/app/startups/new': typeof AppStartupsNewRoute
   '/app/dashboard': typeof AppDashboardIndexRoute
+  '/app/explore': typeof AppExploreIndexRoute
+  '/app/pitch': typeof AppPitchIndexRoute
+  '/app/scores': typeof AppScoresIndexRoute
+  '/app/sprints': typeof AppSprintsIndexRoute
+  '/app/startup': typeof AppStartupIndexRoute
   '/app/team': typeof AppTeamIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/app': typeof AppRouteRouteWithChildren
   '/invite/$token': typeof InviteTokenRoute
+  '/s/$slug': typeof SSlugRoute
+  '/app': typeof AppIndexRoute
+  '/explore': typeof ExploreIndexRoute
   '/pricing': typeof PricingIndexRoute
+  '/app/sprints/$sprintId': typeof AppSprintsSprintIdRoute
+  '/app/sprints/new': typeof AppSprintsNewRoute
   '/app/startups/new': typeof AppStartupsNewRoute
   '/app/dashboard': typeof AppDashboardIndexRoute
+  '/app/explore': typeof AppExploreIndexRoute
+  '/app/pitch': typeof AppPitchIndexRoute
+  '/app/scores': typeof AppScoresIndexRoute
+  '/app/sprints': typeof AppSprintsIndexRoute
+  '/app/startup': typeof AppStartupIndexRoute
   '/app/team': typeof AppTeamIndexRoute
 }
 export interface FileRoutesById {
@@ -76,9 +155,19 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/app': typeof AppRouteRouteWithChildren
   '/invite/$token': typeof InviteTokenRoute
+  '/s/$slug': typeof SSlugRoute
+  '/app/': typeof AppIndexRoute
+  '/explore/': typeof ExploreIndexRoute
   '/pricing/': typeof PricingIndexRoute
+  '/app/sprints/$sprintId': typeof AppSprintsSprintIdRoute
+  '/app/sprints/new': typeof AppSprintsNewRoute
   '/app/startups/new': typeof AppStartupsNewRoute
   '/app/dashboard/': typeof AppDashboardIndexRoute
+  '/app/explore/': typeof AppExploreIndexRoute
+  '/app/pitch/': typeof AppPitchIndexRoute
+  '/app/scores/': typeof AppScoresIndexRoute
+  '/app/sprints/': typeof AppSprintsIndexRoute
+  '/app/startup/': typeof AppStartupIndexRoute
   '/app/team/': typeof AppTeamIndexRoute
 }
 export interface FileRouteTypes {
@@ -87,27 +176,56 @@ export interface FileRouteTypes {
     | '/'
     | '/app'
     | '/invite/$token'
+    | '/s/$slug'
+    | '/app/'
+    | '/explore'
     | '/pricing'
+    | '/app/sprints/$sprintId'
+    | '/app/sprints/new'
     | '/app/startups/new'
     | '/app/dashboard'
+    | '/app/explore'
+    | '/app/pitch'
+    | '/app/scores'
+    | '/app/sprints'
+    | '/app/startup'
     | '/app/team'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/app'
     | '/invite/$token'
+    | '/s/$slug'
+    | '/app'
+    | '/explore'
     | '/pricing'
+    | '/app/sprints/$sprintId'
+    | '/app/sprints/new'
     | '/app/startups/new'
     | '/app/dashboard'
+    | '/app/explore'
+    | '/app/pitch'
+    | '/app/scores'
+    | '/app/sprints'
+    | '/app/startup'
     | '/app/team'
   id:
     | '__root__'
     | '/'
     | '/app'
     | '/invite/$token'
+    | '/s/$slug'
+    | '/app/'
+    | '/explore/'
     | '/pricing/'
+    | '/app/sprints/$sprintId'
+    | '/app/sprints/new'
     | '/app/startups/new'
     | '/app/dashboard/'
+    | '/app/explore/'
+    | '/app/pitch/'
+    | '/app/scores/'
+    | '/app/sprints/'
+    | '/app/startup/'
     | '/app/team/'
   fileRoutesById: FileRoutesById
 }
@@ -115,6 +233,8 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AppRouteRoute: typeof AppRouteRouteWithChildren
   InviteTokenRoute: typeof InviteTokenRoute
+  SSlugRoute: typeof SSlugRoute
+  ExploreIndexRoute: typeof ExploreIndexRoute
   PricingIndexRoute: typeof PricingIndexRoute
 }
 
@@ -141,6 +261,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PricingIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/explore/': {
+      id: '/explore/'
+      path: '/explore'
+      fullPath: '/explore'
+      preLoaderRoute: typeof ExploreIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/app/': {
+      id: '/app/'
+      path: '/'
+      fullPath: '/app/'
+      preLoaderRoute: typeof AppIndexRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/s/$slug': {
+      id: '/s/$slug'
+      path: '/s/$slug'
+      fullPath: '/s/$slug'
+      preLoaderRoute: typeof SSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/invite/$token': {
       id: '/invite/$token'
       path: '/invite/$token'
@@ -153,6 +294,41 @@ declare module '@tanstack/react-router' {
       path: '/team'
       fullPath: '/app/team'
       preLoaderRoute: typeof AppTeamIndexRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/app/startup/': {
+      id: '/app/startup/'
+      path: '/startup'
+      fullPath: '/app/startup'
+      preLoaderRoute: typeof AppStartupIndexRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/app/sprints/': {
+      id: '/app/sprints/'
+      path: '/sprints'
+      fullPath: '/app/sprints'
+      preLoaderRoute: typeof AppSprintsIndexRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/app/scores/': {
+      id: '/app/scores/'
+      path: '/scores'
+      fullPath: '/app/scores'
+      preLoaderRoute: typeof AppScoresIndexRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/app/pitch/': {
+      id: '/app/pitch/'
+      path: '/pitch'
+      fullPath: '/app/pitch'
+      preLoaderRoute: typeof AppPitchIndexRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/app/explore/': {
+      id: '/app/explore/'
+      path: '/explore'
+      fullPath: '/app/explore'
+      preLoaderRoute: typeof AppExploreIndexRouteImport
       parentRoute: typeof AppRouteRoute
     }
     '/app/dashboard/': {
@@ -169,18 +345,48 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppStartupsNewRouteImport
       parentRoute: typeof AppRouteRoute
     }
+    '/app/sprints/new': {
+      id: '/app/sprints/new'
+      path: '/sprints/new'
+      fullPath: '/app/sprints/new'
+      preLoaderRoute: typeof AppSprintsNewRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/app/sprints/$sprintId': {
+      id: '/app/sprints/$sprintId'
+      path: '/sprints/$sprintId'
+      fullPath: '/app/sprints/$sprintId'
+      preLoaderRoute: typeof AppSprintsSprintIdRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
   }
 }
 
 interface AppRouteRouteChildren {
+  AppIndexRoute: typeof AppIndexRoute
+  AppSprintsSprintIdRoute: typeof AppSprintsSprintIdRoute
+  AppSprintsNewRoute: typeof AppSprintsNewRoute
   AppStartupsNewRoute: typeof AppStartupsNewRoute
   AppDashboardIndexRoute: typeof AppDashboardIndexRoute
+  AppExploreIndexRoute: typeof AppExploreIndexRoute
+  AppPitchIndexRoute: typeof AppPitchIndexRoute
+  AppScoresIndexRoute: typeof AppScoresIndexRoute
+  AppSprintsIndexRoute: typeof AppSprintsIndexRoute
+  AppStartupIndexRoute: typeof AppStartupIndexRoute
   AppTeamIndexRoute: typeof AppTeamIndexRoute
 }
 
 const AppRouteRouteChildren: AppRouteRouteChildren = {
+  AppIndexRoute: AppIndexRoute,
+  AppSprintsSprintIdRoute: AppSprintsSprintIdRoute,
+  AppSprintsNewRoute: AppSprintsNewRoute,
   AppStartupsNewRoute: AppStartupsNewRoute,
   AppDashboardIndexRoute: AppDashboardIndexRoute,
+  AppExploreIndexRoute: AppExploreIndexRoute,
+  AppPitchIndexRoute: AppPitchIndexRoute,
+  AppScoresIndexRoute: AppScoresIndexRoute,
+  AppSprintsIndexRoute: AppSprintsIndexRoute,
+  AppStartupIndexRoute: AppStartupIndexRoute,
   AppTeamIndexRoute: AppTeamIndexRoute,
 }
 
@@ -192,6 +398,8 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AppRouteRoute: AppRouteRouteWithChildren,
   InviteTokenRoute: InviteTokenRoute,
+  SSlugRoute: SSlugRoute,
+  ExploreIndexRoute: ExploreIndexRoute,
   PricingIndexRoute: PricingIndexRoute,
 }
 export const routeTree = rootRouteImport

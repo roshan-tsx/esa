@@ -2,11 +2,47 @@ import { Link } from "@tanstack/react-router";
 import { useMutation, useQuery } from "convex/react";
 import { useState } from "react";
 import { toast } from "sonner";
+import { PageLoading } from "~/components/shared/PageLoading";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { api } from "@convex/_generated/api";
+
+function MemberList({
+	members,
+}: {
+	readonly members: Array<{
+		_id: string;
+		role: string;
+		user: { name: string | null; email: string | null };
+	}>;
+}) {
+	return (
+		<ul className="space-y-2">
+			{members?.map((member) => (
+				<li key={member._id}>
+					<Card className="gap-0 py-0 shadow-none">
+						<CardContent className="flex items-center justify-between gap-3 p-4">
+							<div className="min-w-0">
+								<p className="truncate font-medium">
+									{member.user.name ?? member.user.email ?? "Member"}
+								</p>
+								<p className="truncate text-sm text-muted-foreground">
+									{member.user.email}
+								</p>
+							</div>
+							<Badge variant="secondary" className="shrink-0">
+								{member.role}
+							</Badge>
+						</CardContent>
+					</Card>
+				</li>
+			))}
+		</ul>
+	);
+}
 
 export function TeamPage() {
 	const startup = useQuery(api.startups.getMine);
@@ -53,118 +89,107 @@ export function TeamPage() {
 	}
 
 	if (startup === undefined) {
-		return (
-			<div className="flex h-screen items-center justify-center">
-				<p className="text-muted-foreground">Loading team...</p>
-			</div>
-		);
+		return <PageLoading />;
 	}
 
 	if (!startup) {
 		return (
-			<div className="mx-auto flex min-h-screen max-w-xl flex-col gap-4 p-10">
-				<p className="text-muted-foreground">Create a startup first.</p>
-				<Button asChild>
+			<div className="w-full py-10 text-center">
+				<h1 className="text-2xl font-bold">Create a startup first</h1>
+				<Button asChild className="mt-6">
 					<Link to="/app/startups/new">Create startup</Link>
 				</Button>
 			</div>
 		);
 	}
 
-	if (startup.role !== "founder") {
-		return (
-			<div className="mx-auto flex min-h-screen max-w-xl flex-col gap-4 p-10">
-				<p className="text-muted-foreground">
-					Only founders can manage team invites.
-				</p>
-				<Button asChild variant="outline">
-					<Link to="/app/dashboard">Back to dashboard</Link>
-				</Button>
-			</div>
-		);
-	}
+	const isFounder = startup.role === "founder";
 
 	return (
-		<div className="mx-auto flex min-h-screen w-full max-w-2xl flex-col gap-8 p-10">
-			<div className="flex items-center justify-between">
-				<div>
-					<h1 className="text-3xl font-bold">Team</h1>
-					<p className="text-muted-foreground">{startup.startup.name}</p>
-				</div>
-				<Button asChild variant="outline">
-					<Link to="/app/dashboard">Dashboard</Link>
-				</Button>
+		<div className="w-full py-8 space-y-6">
+			<div>
+				<h1 className="text-2xl font-bold">Team</h1>
+				<p className="text-sm text-muted-foreground">{startup.startup.name}</p>
 			</div>
 
-			<section className="rounded-xl border p-6 space-y-4">
-				<h2 className="text-lg font-semibold">Members</h2>
-				<ul className="space-y-2">
-					{members?.map((member) => (
-						<li
-							key={member._id}
-							className="flex items-center justify-between rounded-lg border px-3 py-2"
-						>
-							<div>
-								<p className="font-medium">
-									{member.user.name ?? member.user.email ?? "Member"}
-								</p>
-								<p className="text-sm text-muted-foreground">
-									{member.user.email}
-								</p>
-							</div>
-							<Badge variant="secondary">{member.role}</Badge>
-						</li>
-					))}
-				</ul>
-			</section>
+				<Card className="border-border/60 shadow-none">
+					<CardHeader>
+						<CardTitle className="text-base">Members</CardTitle>
+					</CardHeader>
+					<CardContent>
+						<MemberList members={members ?? []} />
+					</CardContent>
+				</Card>
 
-			<section className="rounded-xl border p-6 space-y-4">
-				<h2 className="text-lg font-semibold">Invite teammate</h2>
-				<form onSubmit={handleInvite} className="flex gap-2">
-					<div className="flex-1 space-y-2">
-						<Label htmlFor="invite-email">Email</Label>
-						<Input
-							id="invite-email"
-							type="email"
-							required
-							value={email}
-							onChange={(e) => setEmail(e.target.value)}
-							placeholder="teammate@company.com"
-						/>
-					</div>
-					<div className="flex items-end">
-						<Button type="submit" disabled={isPending}>
-							{isPending ? "Sending..." : "Send invite"}
-						</Button>
-					</div>
-				</form>
+				{isFounder && (
+					<>
+						<Card className="border-border/60 shadow-none">
+							<CardHeader>
+								<CardTitle className="text-base">Invite teammate</CardTitle>
+							</CardHeader>
+							<CardContent className="space-y-4">
+								<form
+									onSubmit={handleInvite}
+									className="flex flex-col gap-3 sm:flex-row sm:items-end"
+								>
+									<div className="flex-1 space-y-2">
+										<Label htmlFor="invite-email">Email</Label>
+										<Input
+											id="invite-email"
+											type="email"
+											required
+											value={email}
+											onChange={(e) => setEmail(e.target.value)}
+											placeholder="teammate@company.com"
+											className="h-11"
+										/>
+									</div>
+									<Button
+										type="submit"
+										disabled={isPending}
+										className="h-11 sm:px-6"
+									>
+										{isPending ? "Sending..." : "Send invite"}
+									</Button>
+								</form>
 
-				{lastInviteLink && (
-					<div className="rounded-lg bg-muted p-3 text-sm break-all">
-						<p className="font-medium mb-1">Invite link</p>
-						<p>{lastInviteLink}</p>
-					</div>
+								{lastInviteLink && (
+									<div className="rounded-xl border border-border/60 bg-muted/30 p-4 text-sm break-all">
+										<p className="mb-1 font-medium">Invite link</p>
+										<p className="text-muted-foreground">{lastInviteLink}</p>
+									</div>
+								)}
+							</CardContent>
+						</Card>
+
+						<Card className="border-border/60 shadow-none">
+							<CardHeader>
+								<CardTitle className="text-base">Pending invites</CardTitle>
+							</CardHeader>
+							<CardContent>
+								{invites?.length ? (
+									<ul className="space-y-2">
+										{invites.map((invite) => (
+											<li
+												key={invite._id}
+												className="flex items-center justify-between gap-3 rounded-xl border border-border/60 px-4 py-3 text-sm"
+											>
+												<span className="truncate">{invite.email}</span>
+												<Badge variant="outline" className="shrink-0">
+													{invite.status}
+												</Badge>
+											</li>
+										))}
+									</ul>
+								) : (
+									<p className="text-sm text-muted-foreground">
+										No pending invites.
+									</p>
+								)}
+							</CardContent>
+						</Card>
+					</>
 				)}
-			</section>
-
-			<section className="rounded-xl border p-6 space-y-3">
-				<h2 className="text-lg font-semibold">Pending invites</h2>
-				{invites?.length ? (
-					<ul className="space-y-2">
-						{invites.map((invite) => (
-							<li
-								key={invite._id}
-								className="flex items-center justify-between rounded-lg border px-3 py-2 text-sm"
-							>
-								<span>{invite.email}</span>
-								<Badge variant="outline">{invite.status}</Badge>
-							</li>
-						))}
-					</ul>
-				) : (
-					<p className="text-sm text-muted-foreground">No pending invites.</p>
-				)}
-			</section>
 		</div>
 	);
 }

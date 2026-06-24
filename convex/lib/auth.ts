@@ -12,6 +12,16 @@ export async function requireUserId(ctx: AuthCtx): Promise<Id<"users">> {
 	return userId;
 }
 
+export async function initUserProfile(
+	ctx: MutationCtx,
+	userId: Id<"users">,
+): Promise<void> {
+	const user = await ctx.db.get(userId);
+	if (user && !user.planTier) {
+		await ctx.db.patch(userId, { planTier: "free" });
+	}
+}
+
 export async function isProUser(
 	ctx: AuthCtx,
 	userId: Id<"users">,
