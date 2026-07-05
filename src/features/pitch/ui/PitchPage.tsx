@@ -1,8 +1,8 @@
 import { Link } from "@tanstack/react-router";
-import { PageLoading } from "~/components/shared/PageLoading";
 import { Button } from "~/components/ui/button";
 import { PitchEditor } from "~/features/pitch/components/PitchEditor";
 import { useWorkspace } from "~/features/app/hooks/useWorkspace";
+import { PageLoading } from "~/components/globals/PageLoading";
 
 export function PitchPage() {
 	const { active: startup, isLoading } = useWorkspace();
@@ -30,7 +30,9 @@ export function PitchPage() {
 		return (
 			<div className="mx-auto w-full max-w-xl space-y-4 py-16 text-center">
 				<h1 className="text-2xl font-bold">Pitch deck</h1>
-				<p className="text-muted-foreground">Only founders can edit the pitch.</p>
+				<p className="text-muted-foreground">
+					Only founders can edit the pitch.
+				</p>
 				{isPublic ? (
 					<Button asChild>
 						<a

@@ -45,7 +45,9 @@ const tabs = [
 
 export function AppShell({ children }: { readonly children: React.ReactNode }) {
 	const { signOut } = useAuthActions();
-	const pathname = useRouterState({ select: (state) => state.location.pathname });
+	const pathname = useRouterState({
+		select: (state) => state.location.pathname,
+	});
 	const { user: me } = useCurrentUser();
 
 	return (
@@ -63,17 +65,14 @@ export function AppShell({ children }: { readonly children: React.ReactNode }) {
 					</div>
 
 					<div className="flex items-center gap-2 sm:gap-3">
-						{me && (
-							<Button asChild variant="outline" size="sm">
-								<Link to="/app/scores">{me.totalScore} pts</Link>
-							</Button>
-						)}
-
 						<NotificationBell />
 
 						<DropdownMenu>
 							<DropdownMenuTrigger asChild>
-								<Button variant="outline" className="h-10 gap-2 rounded-md px-2">
+								<Button
+									variant="outline"
+									className="h-10 gap-2 rounded-md px-2"
+								>
 									<Avatar className="size-7">
 										<AvatarFallback className="text-xs">
 											{initials(me?.name ?? null, me?.email ?? null)}
@@ -96,14 +95,9 @@ export function AppShell({ children }: { readonly children: React.ReactNode }) {
 									</div>
 								)}
 								<DropdownMenuSeparator />
-								<DropdownMenuItem asChild>
-									<Link to="/app/scores" className="cursor-pointer">
-										Scores
-									</Link>
-								</DropdownMenuItem>
 								{me?.planTier === "free" && (
 									<DropdownMenuItem asChild>
-										<Link to="/pricing" className="cursor-pointer">
+										<Link to="/upgrade" className="cursor-pointer">
 											Upgrade to Pro
 										</Link>
 									</DropdownMenuItem>
@@ -113,14 +107,17 @@ export function AppShell({ children }: { readonly children: React.ReactNode }) {
 									variant="destructive"
 									onClick={() => signOut()}
 								>
-									Sign out
+									Log out
 								</DropdownMenuItem>
 							</DropdownMenuContent>
 						</DropdownMenu>
 					</div>
 				</div>
 
-				<nav aria-label="Main" className="grid grid-cols-4 border-t border-border">
+				<nav
+					aria-label="Main"
+					className="grid grid-cols-4 border-t border-border"
+				>
 					{tabs.map(({ label, to, isActive }) => {
 						const active = isActive(pathname);
 						return (

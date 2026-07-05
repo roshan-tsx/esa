@@ -6,7 +6,9 @@ type GoogleButtonProps = {
 	readonly label?: string;
 };
 
-export function GoogleButton({ label = "Sign in with Google" }: GoogleButtonProps) {
+export function GoogleButton({
+	label = "Sign in with Google",
+}: GoogleButtonProps) {
 	const { signInWithGoogle, isPending } = useGoogleSignIn();
 
 	return (
@@ -14,7 +16,7 @@ export function GoogleButton({ label = "Sign in with Google" }: GoogleButtonProp
 			type="button"
 			variant="outline"
 			size="lg"
-			className="h-11 w-full rounded-lg"
+			className="h-11 w-fit rounded-lg"
 			disabled={isPending}
 			onClick={signInWithGoogle}
 		>

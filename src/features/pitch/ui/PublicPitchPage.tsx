@@ -1,7 +1,7 @@
 import { useConvexAuth } from "@convex-dev/auth/react";
 import { Link } from "@tanstack/react-router";
 import { useQuery } from "convex/react";
-import { PageLoading } from "~/components/shared/PageLoading";
+import { PageLoading } from "~/components/globals/PageLoading";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { Card, CardContent } from "~/components/ui/card";
@@ -36,7 +36,7 @@ function PublicHeader() {
 				Engin
 			</Link>
 			<Button asChild size="sm">
-				<Link to="/">Sign in</Link>
+				<Link to="/">Join Engin</Link>
 			</Button>
 		</header>
 	);
@@ -104,11 +104,11 @@ export function PublicPitchPage({ slug }: PublicPitchPageProps) {
 					<Card className="border-dashed shadow-none">
 						<CardContent className="space-y-4 p-8 text-center">
 							<h2 className="text-lg font-semibold">
-								Sign in to view the full pitch
+								Join Engin to view the full pitch
 							</h2>
 							{!isAuthenticated && (
 								<Button asChild>
-									<Link to="/">Sign in to view more</Link>
+									<Link to="/">Join Engin to view more</Link>
 								</Button>
 							)}
 						</CardContent>

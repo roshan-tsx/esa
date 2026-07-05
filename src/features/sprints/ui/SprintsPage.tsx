@@ -1,7 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { useQuery } from "convex/react";
-import { PageLoading } from "~/components/shared/PageLoading";
-import { CreateStartupPrompt } from "~/components/shared/CreateStartupPrompt";
+import { PageLoading } from "~/components/globals/PageLoading";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { Card, CardContent } from "~/components/ui/card";
@@ -21,10 +20,15 @@ export function SprintsPage() {
 
 	if (!startup) {
 		return (
-			<CreateStartupPrompt
-				title="Create a startup"
-				description="Post hiring sprints after setting up your startup."
-			/>
+			<div className="mx-auto w-full max-w-xl py-16 text-center">
+				<h1 className="text-2xl font-bold">Hiring sprints</h1>
+				<p className="mt-2 text-muted-foreground">
+					Create your startup first to post hiring sprints.
+				</p>
+				<Button asChild className="mt-6">
+					<Link to="/app/startups/new">Create startup</Link>
+				</Button>
+			</div>
 		);
 	}
 
@@ -69,7 +73,10 @@ export function SprintsPage() {
 				<ul className="space-y-2">
 					{sprints.map((sprint) => (
 						<li key={sprint._id}>
-							<Link to="/app/sprints/$sprintId" params={{ sprintId: sprint._id }}>
+							<Link
+								to="/app/sprints/$sprintId"
+								params={{ sprintId: sprint._id }}
+							>
 								<Card className="gap-0 py-0 shadow-none transition-colors hover:border-primary/30 hover:bg-card/80">
 									<CardContent className="flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between">
 										<div className="min-w-0">

@@ -1,5 +1,4 @@
-import { PageLoading } from "~/components/shared/PageLoading";
-import { CreateStartupPrompt } from "~/components/shared/CreateStartupPrompt";
+import { PageLoading } from "~/components/globals/PageLoading";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
@@ -8,6 +7,7 @@ import { Label } from "~/components/ui/label";
 import { MemberList } from "~/features/team/components/MemberList";
 import { useTeamInvites } from "~/features/team/hooks/useTeamInvites";
 import { useWorkspace } from "~/features/app/hooks/useWorkspace";
+import { Link } from "@tanstack/react-router";
 
 export function TeamPage() {
 	const { isLoading: workspaceLoading } = useWorkspace();
@@ -27,10 +27,15 @@ export function TeamPage() {
 
 	if (!startup) {
 		return (
-			<CreateStartupPrompt
-				title="Create a startup first"
-				description="Set up your workspace to invite teammates."
-			/>
+			<div className="mx-auto w-full max-w-xl py-16 text-center">
+				<h1 className="text-2xl font-bold">Team</h1>
+				<p className="mt-2 text-muted-foreground">
+					Create your startup first to invite teammates.
+				</p>
+				<Button asChild className="mt-6">
+					<Link to="/app/startups/new">Create startup</Link>
+				</Button>
+			</div>
 		);
 	}
 

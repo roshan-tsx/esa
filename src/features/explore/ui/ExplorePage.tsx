@@ -1,11 +1,14 @@
 import { Link } from "@tanstack/react-router";
 import { Search } from "lucide-react";
-import { PageLoading } from "~/components/shared/PageLoading";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { Card, CardContent } from "~/components/ui/card";
 import { Input } from "~/components/ui/input";
-import { formatTimeLeft, useExplore } from "~/features/explore/hooks/useExplore";
+import {
+	formatTimeLeft,
+	useExplore,
+} from "~/features/explore/hooks/useExplore";
+import { PageLoading } from "~/components/globals/PageLoading";
 
 type ExplorePageProps = {
 	readonly inApp?: boolean;
@@ -82,7 +85,7 @@ export function ExplorePage({ inApp = false }: ExplorePageProps) {
 			{results && !results.isPro && results.applicationLimit !== null && (
 				<p className="rounded-lg border border-border/60 bg-card/40 px-4 py-3 text-sm text-muted-foreground">
 					Free plan: {results.applicationLimit} sprint applications per day.{" "}
-					<Link to="/pricing" className="underline hover:text-foreground">
+					<Link to="/upgrade" className="underline hover:text-foreground">
 						Go Pro
 					</Link>{" "}
 					for unlimited.
@@ -228,10 +231,10 @@ export function ExplorePage({ inApp = false }: ExplorePageProps) {
 				</Link>
 				<div className="flex gap-2">
 					<Button asChild variant="ghost" size="sm">
-						<Link to="/pricing">Pricing</Link>
+						<Link to="/upgrade">Upgrade</Link>
 					</Button>
 					<Button asChild size="sm">
-						<Link to="/">Sign in</Link>
+						<Link to="/">Join Engin</Link>
 					</Button>
 				</div>
 			</header>

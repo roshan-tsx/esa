@@ -11,7 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AppRouteRouteImport } from './routes/app/route'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as PricingIndexRouteImport } from './routes/pricing/index'
+import { Route as UpgradeIndexRouteImport } from './routes/upgrade/index'
 import { Route as ExploreIndexRouteImport } from './routes/explore/index'
 import { Route as AppIndexRouteImport } from './routes/app/index'
 import { Route as SSlugRouteImport } from './routes/s/$slug'
@@ -19,7 +19,6 @@ import { Route as InviteTokenRouteImport } from './routes/invite/$token'
 import { Route as AppTeamIndexRouteImport } from './routes/app/team/index'
 import { Route as AppStartupIndexRouteImport } from './routes/app/startup/index'
 import { Route as AppSprintsIndexRouteImport } from './routes/app/sprints/index'
-import { Route as AppScoresIndexRouteImport } from './routes/app/scores/index'
 import { Route as AppPitchIndexRouteImport } from './routes/app/pitch/index'
 import { Route as AppExploreIndexRouteImport } from './routes/app/explore/index'
 import { Route as AppDashboardIndexRouteImport } from './routes/app/dashboard/index'
@@ -37,9 +36,9 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const PricingIndexRoute = PricingIndexRouteImport.update({
-  id: '/pricing/',
-  path: '/pricing/',
+const UpgradeIndexRoute = UpgradeIndexRouteImport.update({
+  id: '/upgrade/',
+  path: '/upgrade/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ExploreIndexRoute = ExploreIndexRouteImport.update({
@@ -75,11 +74,6 @@ const AppStartupIndexRoute = AppStartupIndexRouteImport.update({
 const AppSprintsIndexRoute = AppSprintsIndexRouteImport.update({
   id: '/sprints/',
   path: '/sprints/',
-  getParentRoute: () => AppRouteRoute,
-} as any)
-const AppScoresIndexRoute = AppScoresIndexRouteImport.update({
-  id: '/scores/',
-  path: '/scores/',
   getParentRoute: () => AppRouteRoute,
 } as any)
 const AppPitchIndexRoute = AppPitchIndexRouteImport.update({
@@ -120,14 +114,13 @@ export interface FileRoutesByFullPath {
   '/s/$slug': typeof SSlugRoute
   '/app/': typeof AppIndexRoute
   '/explore': typeof ExploreIndexRoute
-  '/pricing': typeof PricingIndexRoute
+  '/upgrade': typeof UpgradeIndexRoute
   '/app/sprints/$sprintId': typeof AppSprintsSprintIdRoute
   '/app/sprints/new': typeof AppSprintsNewRoute
   '/app/startups/new': typeof AppStartupsNewRoute
   '/app/dashboard': typeof AppDashboardIndexRoute
   '/app/explore': typeof AppExploreIndexRoute
   '/app/pitch': typeof AppPitchIndexRoute
-  '/app/scores': typeof AppScoresIndexRoute
   '/app/sprints': typeof AppSprintsIndexRoute
   '/app/startup': typeof AppStartupIndexRoute
   '/app/team': typeof AppTeamIndexRoute
@@ -138,14 +131,13 @@ export interface FileRoutesByTo {
   '/s/$slug': typeof SSlugRoute
   '/app': typeof AppIndexRoute
   '/explore': typeof ExploreIndexRoute
-  '/pricing': typeof PricingIndexRoute
+  '/upgrade': typeof UpgradeIndexRoute
   '/app/sprints/$sprintId': typeof AppSprintsSprintIdRoute
   '/app/sprints/new': typeof AppSprintsNewRoute
   '/app/startups/new': typeof AppStartupsNewRoute
   '/app/dashboard': typeof AppDashboardIndexRoute
   '/app/explore': typeof AppExploreIndexRoute
   '/app/pitch': typeof AppPitchIndexRoute
-  '/app/scores': typeof AppScoresIndexRoute
   '/app/sprints': typeof AppSprintsIndexRoute
   '/app/startup': typeof AppStartupIndexRoute
   '/app/team': typeof AppTeamIndexRoute
@@ -158,14 +150,13 @@ export interface FileRoutesById {
   '/s/$slug': typeof SSlugRoute
   '/app/': typeof AppIndexRoute
   '/explore/': typeof ExploreIndexRoute
-  '/pricing/': typeof PricingIndexRoute
+  '/upgrade/': typeof UpgradeIndexRoute
   '/app/sprints/$sprintId': typeof AppSprintsSprintIdRoute
   '/app/sprints/new': typeof AppSprintsNewRoute
   '/app/startups/new': typeof AppStartupsNewRoute
   '/app/dashboard/': typeof AppDashboardIndexRoute
   '/app/explore/': typeof AppExploreIndexRoute
   '/app/pitch/': typeof AppPitchIndexRoute
-  '/app/scores/': typeof AppScoresIndexRoute
   '/app/sprints/': typeof AppSprintsIndexRoute
   '/app/startup/': typeof AppStartupIndexRoute
   '/app/team/': typeof AppTeamIndexRoute
@@ -179,14 +170,13 @@ export interface FileRouteTypes {
     | '/s/$slug'
     | '/app/'
     | '/explore'
-    | '/pricing'
+    | '/upgrade'
     | '/app/sprints/$sprintId'
     | '/app/sprints/new'
     | '/app/startups/new'
     | '/app/dashboard'
     | '/app/explore'
     | '/app/pitch'
-    | '/app/scores'
     | '/app/sprints'
     | '/app/startup'
     | '/app/team'
@@ -197,14 +187,13 @@ export interface FileRouteTypes {
     | '/s/$slug'
     | '/app'
     | '/explore'
-    | '/pricing'
+    | '/upgrade'
     | '/app/sprints/$sprintId'
     | '/app/sprints/new'
     | '/app/startups/new'
     | '/app/dashboard'
     | '/app/explore'
     | '/app/pitch'
-    | '/app/scores'
     | '/app/sprints'
     | '/app/startup'
     | '/app/team'
@@ -216,14 +205,13 @@ export interface FileRouteTypes {
     | '/s/$slug'
     | '/app/'
     | '/explore/'
-    | '/pricing/'
+    | '/upgrade/'
     | '/app/sprints/$sprintId'
     | '/app/sprints/new'
     | '/app/startups/new'
     | '/app/dashboard/'
     | '/app/explore/'
     | '/app/pitch/'
-    | '/app/scores/'
     | '/app/sprints/'
     | '/app/startup/'
     | '/app/team/'
@@ -235,7 +223,7 @@ export interface RootRouteChildren {
   InviteTokenRoute: typeof InviteTokenRoute
   SSlugRoute: typeof SSlugRoute
   ExploreIndexRoute: typeof ExploreIndexRoute
-  PricingIndexRoute: typeof PricingIndexRoute
+  UpgradeIndexRoute: typeof UpgradeIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -254,11 +242,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/pricing/': {
-      id: '/pricing/'
-      path: '/pricing'
-      fullPath: '/pricing'
-      preLoaderRoute: typeof PricingIndexRouteImport
+    '/upgrade/': {
+      id: '/upgrade/'
+      path: '/upgrade'
+      fullPath: '/upgrade'
+      preLoaderRoute: typeof UpgradeIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/explore/': {
@@ -308,13 +296,6 @@ declare module '@tanstack/react-router' {
       path: '/sprints'
       fullPath: '/app/sprints'
       preLoaderRoute: typeof AppSprintsIndexRouteImport
-      parentRoute: typeof AppRouteRoute
-    }
-    '/app/scores/': {
-      id: '/app/scores/'
-      path: '/scores'
-      fullPath: '/app/scores'
-      preLoaderRoute: typeof AppScoresIndexRouteImport
       parentRoute: typeof AppRouteRoute
     }
     '/app/pitch/': {
@@ -370,7 +351,6 @@ interface AppRouteRouteChildren {
   AppDashboardIndexRoute: typeof AppDashboardIndexRoute
   AppExploreIndexRoute: typeof AppExploreIndexRoute
   AppPitchIndexRoute: typeof AppPitchIndexRoute
-  AppScoresIndexRoute: typeof AppScoresIndexRoute
   AppSprintsIndexRoute: typeof AppSprintsIndexRoute
   AppStartupIndexRoute: typeof AppStartupIndexRoute
   AppTeamIndexRoute: typeof AppTeamIndexRoute
@@ -384,7 +364,6 @@ const AppRouteRouteChildren: AppRouteRouteChildren = {
   AppDashboardIndexRoute: AppDashboardIndexRoute,
   AppExploreIndexRoute: AppExploreIndexRoute,
   AppPitchIndexRoute: AppPitchIndexRoute,
-  AppScoresIndexRoute: AppScoresIndexRoute,
   AppSprintsIndexRoute: AppSprintsIndexRoute,
   AppStartupIndexRoute: AppStartupIndexRoute,
   AppTeamIndexRoute: AppTeamIndexRoute,
@@ -400,7 +379,7 @@ const rootRouteChildren: RootRouteChildren = {
   InviteTokenRoute: InviteTokenRoute,
   SSlugRoute: SSlugRoute,
   ExploreIndexRoute: ExploreIndexRoute,
-  PricingIndexRoute: PricingIndexRoute,
+  UpgradeIndexRoute: UpgradeIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

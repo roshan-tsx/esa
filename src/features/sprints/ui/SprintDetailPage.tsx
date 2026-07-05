@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { PageLoading } from "~/components/shared/PageLoading";
+import { PageLoading } from "~/components/globals/PageLoading";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { FounderDetailsForm } from "~/features/sprints/components/FounderDetailsForm";
@@ -125,9 +125,7 @@ export function SprintDetailPage({ sprintId }: SprintDetailPageProps) {
 						/>
 					)}
 
-					{myApplication && (
-						<ApplicationStatus status={myApplication.status} />
-					)}
+					{myApplication && <ApplicationStatus status={myApplication.status} />}
 
 					{isFounder && (
 						<SprintFounderActions
@@ -154,10 +152,7 @@ export function SprintDetailPage({ sprintId }: SprintDetailPageProps) {
 								)
 							}
 							onHire={(candidateUserId) =>
-								runAction(
-									() => hire({ sprintId, candidateUserId }),
-									"Hired!",
-								)
+								runAction(() => hire({ sprintId, candidateUserId }), "Hired!")
 							}
 						/>
 					)}

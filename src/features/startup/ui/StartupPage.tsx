@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { PageLoading } from "~/components/shared/PageLoading";
+import { PageLoading } from "~/components/globals/PageLoading";
 import { Button } from "~/components/ui/button";
 import { Card, CardContent } from "~/components/ui/card";
 import { useWorkspace } from "~/features/app/hooks/useWorkspace";

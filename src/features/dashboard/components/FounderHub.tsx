@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { toast } from "sonner";
-import { PageLoading } from "~/components/shared/PageLoading";
+import { PageLoading } from "~/components/globals/PageLoading";
 import { Avatar, AvatarFallback } from "~/components/ui/avatar";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
