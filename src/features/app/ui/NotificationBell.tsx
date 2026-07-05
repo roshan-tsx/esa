@@ -1,7 +1,4 @@
-import { useMutation, useQuery } from "convex/react";
 import { Bell, Check } from "lucide-react";
-import { useState } from "react";
-import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
 import {
 	DropdownMenu,
@@ -10,30 +7,10 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
-import { cn } from "~/lib/utils";
-import { api } from "@convex/_generated/api";
-import type { Id } from "@convex/_generated/dataModel";
+import { useNotifications } from "~/features/app/hooks/useNotifications";
 
 export function NotificationBell() {
-	const invites = useQuery(api.invitations.listMyPendingInvites);
-	const acceptInvite = useMutation(api.invitations.acceptInviteById);
-	const [acceptingId, setAcceptingId] = useState<Id<"invites"> | null>(null);
-
-	const count = invites?.length ?? 0;
-
-	async function handleAccept(inviteId: Id<"invites">) {
-		setAcceptingId(inviteId);
-		try {
-			await acceptInvite({ inviteId });
-			toast.success("Invite accepted — switched to that startup");
-		} catch (error) {
-			const message =
-				error instanceof Error ? error.message : "Failed to accept invite";
-			toast.error(message);
-		} finally {
-			setAcceptingId(null);
-		}
-	}
+	const { invites, count, acceptingId, accept } = useNotifications();
 
 	return (
 		<DropdownMenu>
@@ -51,7 +28,7 @@ export function NotificationBell() {
 					<Bell className="size-4" />
 					{count > 0 && (
 						<span
-							className="absolute -right-0.5 -top-0.5 flex size-2.5 rounded-full bg-red-500 ring-2 ring-background"
+							className="absolute -right-0.5 -top-0.5 flex size-2.5 rounded-full bg-destructive ring-2 ring-background"
 							aria-hidden
 						/>
 					)}
@@ -91,12 +68,10 @@ export function NotificationBell() {
 								<Button
 									type="button"
 									size="icon-sm"
-									className={cn(
-										"shrink-0 rounded-full bg-primary text-primary-foreground hover:bg-primary/90",
-									)}
+									className="shrink-0 rounded-full"
 									disabled={acceptingId === invite._id}
 									aria-label={`Accept invite to ${invite.startupName}`}
-									onClick={() => handleAccept(invite._id)}
+									onClick={() => accept(invite._id)}
 								>
 									<Check className="size-4" />
 								</Button>

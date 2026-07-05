@@ -1,8 +1,4 @@
-import { useConvexAuth } from "@convex-dev/auth/react";
 import { Link } from "@tanstack/react-router";
-import { useAction, useQuery } from "convex/react";
-import { useState } from "react";
-import { toast } from "sonner";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import {
@@ -12,7 +8,7 @@ import {
 	CardHeader,
 	CardTitle,
 } from "~/components/ui/card";
-import { api } from "@convex/_generated/api";
+import { useUpgrade } from "~/features/billing/hooks/useUpgrade";
 
 const freeFeatures = [
 	"Team tasks & founder dashboard",
@@ -32,32 +28,7 @@ const proFeatures = [
 ];
 
 export function PricingPage() {
-	const { isAuthenticated } = useConvexAuth();
-	const subscription = useQuery(
-		api.billing.getSubscription,
-		isAuthenticated ? {} : "skip",
-	);
-	const createCheckout = useAction(api.billingActions.createCheckoutLink);
-	const [isLoading, setIsLoading] = useState(false);
-
-	async function handleUpgrade() {
-		if (!isAuthenticated) {
-			toast.error("Sign in to upgrade");
-			return;
-		}
-
-		setIsLoading(true);
-		try {
-			const result = await createCheckout({
-				returnUrl: `${window.location.origin}/app/dashboard`,
-			});
-			window.location.href = result.checkoutUrl;
-		} catch (error) {
-			toast.error(error instanceof Error ? error.message : "Checkout failed");
-		} finally {
-			setIsLoading(false);
-		}
-	}
+	const { isAuthenticated, subscription, isLoading, upgrade } = useUpgrade();
 
 	return (
 		<div className="min-h-dvh bg-background">
@@ -72,7 +43,7 @@ export function PricingPage() {
 				</Button>
 			</header>
 
-			<main className="w-full px-4 py-10 sm:px-6 lg:px-8 space-y-10">
+			<main className="w-full space-y-10 px-4 py-10 sm:px-6 lg:px-8">
 				<div>
 					<h1 className="text-3xl font-bold sm:text-4xl">Pricing</h1>
 					<p className="mt-2 max-w-2xl text-muted-foreground">
@@ -81,7 +52,7 @@ export function PricingPage() {
 					</p>
 				</div>
 
-				<div className="grid gap-6 lg:grid-cols-2">
+				<div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
 					<Card className="shadow-none">
 						<CardHeader>
 							<CardTitle>Free</CardTitle>
@@ -89,8 +60,8 @@ export function PricingPage() {
 						</CardHeader>
 						<CardContent>
 							<ul className="space-y-2 text-sm text-muted-foreground">
-								{freeFeatures.map((f) => (
-									<li key={f}>{f}</li>
+								{freeFeatures.map((feature) => (
+									<li key={feature}>{feature}</li>
 								))}
 							</ul>
 						</CardContent>
@@ -113,8 +84,8 @@ export function PricingPage() {
 						</CardHeader>
 						<CardContent>
 							<ul className="space-y-2 text-sm text-muted-foreground">
-								{proFeatures.map((f) => (
-									<li key={f}>{f}</li>
+								{proFeatures.map((feature) => (
+									<li key={feature}>{feature}</li>
 								))}
 							</ul>
 						</CardContent>
@@ -126,7 +97,7 @@ export function PricingPage() {
 							) : isAuthenticated ? (
 								<Button
 									className="w-full"
-									onClick={handleUpgrade}
+									onClick={upgrade}
 									disabled={isLoading}
 								>
 									{isLoading ? "Redirecting..." : "Upgrade to Pro"}

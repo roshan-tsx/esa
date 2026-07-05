@@ -1,10 +1,7 @@
 import { useConvexAuth } from "@convex-dev/auth/react";
-import { Link, useNavigate } from "@tanstack/react-router";
-import { useMutation, useQuery } from "convex/react";
-import { useState } from "react";
-import { toast } from "sonner";
+import { Link } from "@tanstack/react-router";
 import { Button } from "~/components/ui/button";
-import { api } from "@convex/_generated/api";
+import { useAcceptInvite } from "~/features/team/hooks/useAcceptInvite";
 
 type InviteAcceptPageProps = {
 	readonly token: string;
@@ -12,29 +9,11 @@ type InviteAcceptPageProps = {
 
 export function InviteAcceptPage({ token }: InviteAcceptPageProps) {
 	const { isAuthenticated, isLoading } = useConvexAuth();
-	const navigate = useNavigate();
-	const invite = useQuery(api.invitations.getInviteByToken, { token });
-	const acceptInvite = useMutation(api.invitations.acceptInvite);
-	const [isPending, setIsPending] = useState(false);
-
-	async function handleAccept() {
-		setIsPending(true);
-		try {
-			await acceptInvite({ token });
-			toast.success("Invite accepted");
-			await navigate({ to: "/app/dashboard" });
-		} catch (error) {
-			const message =
-				error instanceof Error ? error.message : "Failed to accept invite";
-			toast.error(message);
-		} finally {
-			setIsPending(false);
-		}
-	}
+	const { invite, isPending, accept } = useAcceptInvite(token);
 
 	if (isLoading || invite === undefined) {
 		return (
-			<div className="flex h-screen items-center justify-center">
+			<div className="flex min-h-dvh items-center justify-center">
 				<p className="text-muted-foreground">Loading invite...</p>
 			</div>
 		);
@@ -42,7 +21,7 @@ export function InviteAcceptPage({ token }: InviteAcceptPageProps) {
 
 	if (!invite) {
 		return (
-			<div className="mx-auto flex min-h-screen max-w-lg flex-col items-center justify-center gap-4 p-10 text-center">
+			<div className="mx-auto flex min-h-dvh max-w-lg flex-col items-center justify-center gap-4 p-10 text-center">
 				<h1 className="text-2xl font-bold">Invite not found</h1>
 				<Button asChild>
 					<Link to="/">Go home</Link>
@@ -52,7 +31,7 @@ export function InviteAcceptPage({ token }: InviteAcceptPageProps) {
 	}
 
 	return (
-		<div className="mx-auto flex min-h-screen max-w-lg flex-col items-center justify-center gap-6 p-10 text-center">
+		<div className="mx-auto flex min-h-dvh max-w-lg flex-col items-center justify-center gap-6 p-10 text-center">
 			<div className="space-y-2">
 				<h1 className="text-3xl font-bold">Join {invite.startup?.name}</h1>
 				<p className="text-muted-foreground">
@@ -61,7 +40,7 @@ export function InviteAcceptPage({ token }: InviteAcceptPageProps) {
 			</div>
 
 			{isAuthenticated ? (
-				<Button onClick={handleAccept} disabled={isPending}>
+				<Button onClick={accept} disabled={isPending}>
 					{isPending ? "Joining..." : "Accept invite"}
 				</Button>
 			) : (

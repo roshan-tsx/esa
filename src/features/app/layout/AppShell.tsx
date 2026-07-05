@@ -1,6 +1,5 @@
 import { useAuthActions } from "@convex-dev/auth/react";
 import { Link, useRouterState } from "@tanstack/react-router";
-import { useQuery } from "convex/react";
 import { Avatar, AvatarFallback } from "~/components/ui/avatar";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
@@ -11,10 +10,11 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
+import { useCurrentUser } from "~/features/app/hooks/useCurrentUser";
 import { NotificationBell } from "~/features/app/ui/NotificationBell";
 import { StartupSwitcher } from "~/features/app/ui/StartupSwitcher";
+import { initials } from "~/lib/initials";
 import { cn } from "~/lib/utils";
-import { api } from "@convex/_generated/api";
 
 const tabs = [
 	{
@@ -43,15 +43,10 @@ const tabs = [
 	},
 ] as const;
 
-function initials(name: string | null, email: string | null) {
-	const source = name ?? email ?? "?";
-	return source.slice(0, 2).toUpperCase();
-}
-
 export function AppShell({ children }: { readonly children: React.ReactNode }) {
 	const { signOut } = useAuthActions();
-	const pathname = useRouterState({ select: (s) => s.location.pathname });
-	const me = useQuery(api.users.getMe);
+	const pathname = useRouterState({ select: (state) => state.location.pathname });
+	const { user: me } = useCurrentUser();
 
 	return (
 		<div className="flex min-h-dvh flex-col bg-background text-foreground">
@@ -69,12 +64,9 @@ export function AppShell({ children }: { readonly children: React.ReactNode }) {
 
 					<div className="flex items-center gap-2 sm:gap-3">
 						{me && (
-							<Link
-								to="/app/scores"
-								className="rounded-md border border-border px-3 py-1.5 text-sm font-medium tabular-nums hover:bg-muted/50"
-							>
-								{me.totalScore} pts
-							</Link>
+							<Button asChild variant="outline" size="sm">
+								<Link to="/app/scores">{me.totalScore} pts</Link>
+							</Button>
 						)}
 
 						<NotificationBell />
@@ -87,7 +79,7 @@ export function AppShell({ children }: { readonly children: React.ReactNode }) {
 											{initials(me?.name ?? null, me?.email ?? null)}
 										</AvatarFallback>
 									</Avatar>
-									<span className="hidden max-w-[8rem] truncate text-sm sm:inline">
+									<span className="hidden max-w-32 truncate text-sm sm:inline">
 										{me?.name ?? me?.email ?? "Account"}
 									</span>
 								</Button>
@@ -98,7 +90,7 @@ export function AppShell({ children }: { readonly children: React.ReactNode }) {
 										<p className="truncate text-sm font-medium">
 											{me.name ?? me.email ?? "User"}
 										</p>
-										<Badge variant="secondary" className="mt-1 text-[10px]">
+										<Badge variant="secondary" className="mt-1 text-xs">
 											{me.planTier}
 										</Badge>
 									</div>
@@ -132,24 +124,25 @@ export function AppShell({ children }: { readonly children: React.ReactNode }) {
 					{tabs.map(({ label, to, isActive }) => {
 						const active = isActive(pathname);
 						return (
-							<Link
+							<Button
 								key={to}
-								to={to}
+								asChild
+								variant="ghost"
 								className={cn(
-									"border-b-2 py-3 text-center text-sm font-medium transition-colors",
+									"h-auto rounded-none border-b-2 py-3 text-sm font-medium",
 									active
 										? "border-foreground text-foreground"
 										: "border-transparent text-muted-foreground hover:text-foreground",
 								)}
 							>
-								{label}
-							</Link>
+								<Link to={to}>{label}</Link>
+							</Button>
 						);
 					})}
 				</nav>
 			</header>
 
-			<main className="flex-1 w-full px-4 sm:px-6 lg:px-8">{children}</main>
+			<main className="w-full flex-1 px-4 sm:px-6 lg:px-8">{children}</main>
 		</div>
 	);
 }

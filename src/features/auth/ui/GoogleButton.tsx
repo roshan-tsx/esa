@@ -1,62 +1,25 @@
-import { useAuthActions } from "@convex-dev/auth/react";
-import { useNavigate } from "@tanstack/react-router";
-import { useMutation } from "convex/react";
-import { useState } from "react";
 import { FaGoogle } from "react-icons/fa";
-import { toast } from "sonner";
-import { api } from "@convex/_generated/api";
+import { Button } from "~/components/ui/button";
+import { useGoogleSignIn } from "~/features/auth/hooks/useGoogleSignIn";
 
-export function GoogleButton() {
-	const { signIn } = useAuthActions();
-	const navigate = useNavigate();
-	const ensureProfile = useMutation(api.users.ensureProfile);
-	const [isPending, setIsPending] = useState(false);
+type GoogleButtonProps = {
+	readonly label?: string;
+};
 
-	async function handleGoogleSignIn() {
-		setIsPending(true);
-		try {
-			const result = await signIn("google", {
-				redirectTo: `${window.location.origin}/app/dashboard`,
-			});
-
-			if (result.redirect) {
-				return;
-			}
-
-			if (result.signingIn) {
-				await ensureProfile();
-				await navigate({ to: "/app/dashboard" });
-			}
-		} catch (error) {
-			const message =
-				error instanceof Error ? error.message : "Google sign-in failed";
-
-			if (
-				message.includes("clientId") ||
-				message.includes("clientSecret") ||
-				message.includes("configuration")
-			) {
-				toast.error(
-					"Google sign-in is not configured. Set AUTH_GOOGLE_ID and AUTH_GOOGLE_SECRET in your Convex deployment.",
-				);
-				return;
-			}
-
-			toast.error(message);
-		} finally {
-			setIsPending(false);
-		}
-	}
+export function GoogleButton({ label = "Sign in with Google" }: GoogleButtonProps) {
+	const { signInWithGoogle, isPending } = useGoogleSignIn();
 
 	return (
-		<button
+		<Button
 			type="button"
+			variant="outline"
+			size="lg"
+			className="h-11 w-full rounded-lg"
 			disabled={isPending}
-			onClick={handleGoogleSignIn}
-			className="flex h-11 w-full items-center justify-center gap-3 rounded-full border border-[#dadce0] bg-white px-4 text-sm font-medium text-[#3c4043] shadow-sm transition-colors hover:bg-[#f8f9fa] disabled:opacity-60"
+			onClick={signInWithGoogle}
 		>
 			<FaGoogle className="size-4" />
-			{isPending ? "Signing in..." : "Sign in with Google"}
-		</button>
+			{isPending ? "Signing in..." : label}
+		</Button>
 	);
 }

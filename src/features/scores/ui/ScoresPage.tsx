@@ -1,31 +1,13 @@
 import { Link } from "@tanstack/react-router";
-import { useMutation, useQuery } from "convex/react";
-import { useState } from "react";
-import { toast } from "sonner";
 import { PageLoading } from "~/components/shared/PageLoading";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { Card, CardContent } from "~/components/ui/card";
 import { Progress } from "~/components/ui/progress";
-import { api } from "@convex/_generated/api";
+import { useScores } from "~/features/scores/hooks/useScores";
 
 export function ScoresPage() {
-	const score = useQuery(api.scores.getMyScore);
-	const leaderboard = useQuery(api.scores.getLeaderboard);
-	const claimDaily = useMutation(api.scores.claimDaily);
-	const [isClaiming, setIsClaiming] = useState(false);
-
-	async function handleClaim() {
-		setIsClaiming(true);
-		try {
-			const result = await claimDaily();
-			toast.success(`+${result.claimed} points. Total: ${result.totalScore}`);
-		} catch (error) {
-			toast.error(error instanceof Error ? error.message : "Claim failed");
-		} finally {
-			setIsClaiming(false);
-		}
-	}
+	const { score, leaderboard, isClaiming, claim } = useScores();
 
 	if (score === undefined) {
 		return <PageLoading />;
@@ -34,7 +16,7 @@ export function ScoresPage() {
 	const progressToNext = score.totalScore % 500;
 
 	return (
-		<div className="w-full py-8 space-y-8">
+		<div className="w-full space-y-8 py-8">
 			<div>
 				<h1 className="text-2xl font-bold">Scores</h1>
 				<p className="text-sm text-muted-foreground">
@@ -63,7 +45,7 @@ export function ScoresPage() {
 					<Button
 						className="w-full sm:w-auto"
 						disabled={!score.canClaimToday || isClaiming}
-						onClick={handleClaim}
+						onClick={claim}
 					>
 						{isClaiming
 							? "Claiming..."

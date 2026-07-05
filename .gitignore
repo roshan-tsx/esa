@@ -23,7 +23,7 @@ dist
 
 .tanstack
 .vercel
-
+.agents/
 .vercel
 .cursorrules
 .env.local

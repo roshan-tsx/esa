@@ -9,17 +9,16 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
-import { cn } from "~/lib/utils";
+import { Skeleton } from "~/components/ui/skeleton";
 import { useWorkspace } from "~/features/app/hooks/useWorkspace";
+import { cn } from "~/lib/utils";
 import type { Id } from "@convex/_generated/dataModel";
 
 export function StartupSwitcher() {
 	const { active, startups, isLoading, setActiveStartup } = useWorkspace();
 
 	if (isLoading) {
-		return (
-			<div className="h-9 w-28 animate-pulse rounded-md bg-muted" />
-		);
+		return <Skeleton className="h-9 w-28 rounded-md" />;
 	}
 
 	if (startups.length === 0) {
@@ -47,7 +46,7 @@ export function StartupSwitcher() {
 				<Button
 					variant="outline"
 					size="sm"
-					className="max-w-[9rem] gap-1.5 sm:max-w-[11rem] inline-flex"
+					className="inline-flex max-w-36 gap-1.5 sm:max-w-44"
 				>
 					<span className="truncate">{active?.startup.name ?? "Select startup"}</span>
 					<ChevronsUpDown className="size-3.5 shrink-0 opacity-50" />
@@ -62,7 +61,7 @@ export function StartupSwitcher() {
 					>
 						<div className="min-w-0 flex-1">
 							<p className="truncate font-medium">{startup.name}</p>
-							<Badge variant="secondary" className="mt-0.5 text-[10px]">
+							<Badge variant="secondary" className="mt-0.5 text-xs">
 								{role}
 							</Badge>
 						</div>

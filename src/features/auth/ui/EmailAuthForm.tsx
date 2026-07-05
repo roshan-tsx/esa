@@ -1,50 +1,24 @@
-import { useAuthActions } from "@convex-dev/auth/react";
-import { useNavigate } from "@tanstack/react-router";
-import { useMutation } from "convex/react";
-import { useState } from "react";
-import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
-import { api } from "@convex/_generated/api";
+import { useEmailAuth } from "~/features/auth/hooks/useEmailAuth";
 
 export function EmailAuthForm() {
-	const { signIn } = useAuthActions();
-	const navigate = useNavigate();
-	const ensureProfile = useMutation(api.users.ensureProfile);
-	const [mode, setMode] = useState<"signIn" | "signUp">("signIn");
-	const [email, setEmail] = useState("");
-	const [password, setPassword] = useState("");
-	const [name, setName] = useState("");
-	const [isPending, setIsPending] = useState(false);
-
-	async function handleSubmit(event: React.FormEvent) {
-		event.preventDefault();
-		setIsPending(true);
-
-		try {
-			const formData = new FormData();
-			formData.set("email", email);
-			formData.set("password", password);
-			formData.set("flow", mode);
-			if (mode === "signUp" && name) {
-				formData.set("name", name);
-			}
-
-			await signIn("password", formData);
-			await ensureProfile();
-			toast.success(mode === "signUp" ? "Account created" : "Signed in");
-			await navigate({ to: "/app/dashboard" });
-		} catch (error) {
-			const message = error instanceof Error ? error.message : "Auth failed";
-			toast.error(message);
-		} finally {
-			setIsPending(false);
-		}
-	}
+	const {
+		mode,
+		setMode,
+		email,
+		setEmail,
+		password,
+		setPassword,
+		name,
+		setName,
+		isPending,
+		submit,
+	} = useEmailAuth();
 
 	return (
-		<form onSubmit={handleSubmit} className="flex flex-col gap-4">
+		<form onSubmit={submit} className="flex flex-col gap-4">
 			<div className="flex gap-2">
 				<Button
 					type="button"
@@ -70,7 +44,7 @@ export function EmailAuthForm() {
 					<Input
 						id="name"
 						value={name}
-						onChange={(e) => setName(e.target.value)}
+						onChange={(event) => setName(event.target.value)}
 						placeholder="Your name"
 					/>
 				</div>
@@ -83,7 +57,7 @@ export function EmailAuthForm() {
 					type="email"
 					required
 					value={email}
-					onChange={(e) => setEmail(e.target.value)}
+					onChange={(event) => setEmail(event.target.value)}
 					placeholder="you@company.com"
 				/>
 			</div>
@@ -96,7 +70,7 @@ export function EmailAuthForm() {
 					required
 					minLength={8}
 					value={password}
-					onChange={(e) => setPassword(e.target.value)}
+					onChange={(event) => setPassword(event.target.value)}
 					placeholder="At least 8 characters"
 				/>
 			</div>
