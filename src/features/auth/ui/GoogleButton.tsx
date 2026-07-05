@@ -2,21 +2,14 @@ import { FaGoogle } from "react-icons/fa";
 import { Button } from "~/components/ui/button";
 import { useGoogleSignIn } from "~/features/auth/hooks/useGoogleSignIn";
 
-type GoogleButtonProps = {
-	readonly label?: string;
-};
-
-export function GoogleButton({
-	label = "Sign in with Google",
-}: GoogleButtonProps) {
+export function GoogleButton({ label = "Join Engin" }: { label?: string }) {
 	const { signInWithGoogle, isPending } = useGoogleSignIn();
 
 	return (
 		<Button
 			type="button"
 			variant="outline"
-			size="lg"
-			className="h-11 w-fit rounded-lg"
+			className="rounded-2xl"
 			disabled={isPending}
 			onClick={signInWithGoogle}
 		>

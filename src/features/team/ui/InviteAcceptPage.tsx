@@ -46,7 +46,7 @@ export function InviteAcceptPage({ token }: InviteAcceptPageProps) {
 			) : (
 				<div className="space-y-3">
 					<p className="text-sm text-muted-foreground">
-						Sign in with {invite.invite.email} to accept this invite.
+						Sign in with Google to accept this invite.
 					</p>
 					<Button asChild>
 						<Link to="/">Sign in</Link>

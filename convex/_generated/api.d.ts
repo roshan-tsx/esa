@@ -18,7 +18,6 @@ import type * as invitations from "../invitations.js";
 import type * as lib_auth from "../lib/auth.js";
 import type * as lib_membership from "../lib/membership.js";
 import type * as lib_time from "../lib/time.js";
-import type * as scores from "../scores.js";
 import type * as sprints from "../sprints.js";
 import type * as startups from "../startups.js";
 import type * as tasks from "../tasks.js";
@@ -41,7 +40,6 @@ declare const fullApi: ApiFromModules<{
   "lib/auth": typeof lib_auth;
   "lib/membership": typeof lib_membership;
   "lib/time": typeof lib_time;
-  scores: typeof scores;
   sprints: typeof sprints;
   startups: typeof startups;
   tasks: typeof tasks;

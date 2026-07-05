@@ -17,7 +17,7 @@ export function LandingPage() {
 
 	return (
 		<div className="flex min-h-screen flex-col bg-background text-foreground p-4">
-			<header className="flex items-center italic">
+			<header className="flex items-center italic px-2">
 				<Link to="/" className="text-2xl font-bold">
 					Engin
 				</Link>
@@ -27,25 +27,18 @@ export function LandingPage() {
 				<div className="flex flex-1 items-center justify-center p-8">
 					<div className="relative flex h-32 w-32 items-center justify-center">
 						<GitPullRequestArrow
-							className="absolute h-64 w-64 text-primary transition-all duration-300 animate-pulse blur-lg opacity-60"
-							strokeWidth={2}
-							aria-hidden
-						/>
-						<GitPullRequestArrow
-							className="relative h-32 w-32 text-primary"
+							className="absolute h-64 w-64 text-primary transition-all duration-500 animate-pulse blur-xs opacity-60"
 							strokeWidth={2}
 							aria-hidden
 						/>
 					</div>
 				</div>
 
-				<div className="flex flex-1 flex-col justify-center items-center gap-8 p-8">
+				<div className="flex flex-1 flex-col justify-center items-start gap-8 ">
 					<h1 className="text-5xl font-bold italic">
 						The Fast Lane for Founders
 					</h1>
-					<div className="flex justify-center">
-						<GoogleButton />
-					</div>
+					<GoogleButton />
 				</div>
 			</main>
 		</div>

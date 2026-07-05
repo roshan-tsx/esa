@@ -8,31 +8,11 @@ export default defineSchema({
 		name: v.optional(v.string()),
 		image: v.optional(v.string()),
 		email: v.optional(v.string()),
-		emailVerificationTime: v.optional(v.number()),
-		phone: v.optional(v.string()),
-		phoneVerificationTime: v.optional(v.number()),
-		isAnonymous: v.optional(v.boolean()),
 		planTier: v.optional(v.union(v.literal("free"), v.literal("pro"))),
 		totalScore: v.optional(v.number()),
 		activeStartupId: v.optional(v.id("startups")),
 	})
-		.index("email", ["email"])
-		.index("phone", ["phone"]),
-	subscriptions: defineTable({
-		userId: v.id("users"),
-		provider: v.literal("dodo"),
-		providerSubscriptionId: v.string(),
-		status: v.union(
-			v.literal("active"),
-			v.literal("cancelled"),
-			v.literal("past_due"),
-			v.literal("trialing"),
-		),
-		plan: v.literal("pro"),
-		currentPeriodEnd: v.optional(v.number()),
-	})
-		.index("by_userId", ["userId"])
-		.index("by_providerSubscriptionId", ["providerSubscriptionId"]),
+		.index("email", ["email"]),
 	startups: defineTable({
 		name: v.string(),
 		slug: v.string(),
@@ -126,13 +106,6 @@ export default defineSchema({
 		createdAt: v.number(),
 	})
 		.index("by_sprintId", ["sprintId"]),
-	dailyScoreClaims: defineTable({
-		userId: v.id("users"),
-		claimDate: v.string(),
-		amount: v.number(),
-	})
-		.index("by_userId_and_claimDate", ["userId", "claimDate"])
-		.index("by_userId", ["userId"]),
 	invites: defineTable({
 		startupId: v.id("startups"),
 		email: v.string(),
