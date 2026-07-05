@@ -8,7 +8,7 @@ import {
 	CardHeader,
 	CardTitle,
 } from "~/components/ui/card";
-import { useUpgrade } from "~/features/billing/hooks/useUpgrade";
+import { useUpgrade } from "~/features/pricing/hooks/useUpgrade";
 
 const freeFeatures = [
 	"Team tasks & founder dashboard",
