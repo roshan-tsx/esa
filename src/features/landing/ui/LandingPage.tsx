@@ -27,7 +27,7 @@ export function LandingPage() {
 				<div className="flex flex-1 items-center justify-center p-8">
 					<div className="relative flex h-32 w-32 items-center justify-center">
 						<GitPullRequestArrow
-							className="absolute h-64 w-64 text-primary transition-all duration-500 animate-pulse blur-xs opacity-60"
+							className="absolute h-64 w-64 text-primary transition-all duration-500 animate-pulse blur-in opacity-60"
 							strokeWidth={2}
 							aria-hidden
 						/>

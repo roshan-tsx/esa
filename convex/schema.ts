@@ -4,15 +4,16 @@ import { v } from "convex/values";
 
 export default defineSchema({
 	...authTables,
+	// Google OAuth only — keep auth defaults + app fields.
 	users: defineTable({
 		name: v.optional(v.string()),
 		image: v.optional(v.string()),
 		email: v.optional(v.string()),
+		emailVerificationTime: v.optional(v.number()),
 		planTier: v.optional(v.union(v.literal("free"), v.literal("pro"))),
 		totalScore: v.optional(v.number()),
 		activeStartupId: v.optional(v.id("startups")),
-	})
-		.index("email", ["email"]),
+	}).index("email", ["email"]),
 	startups: defineTable({
 		name: v.string(),
 		slug: v.string(),

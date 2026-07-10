@@ -10,8 +10,7 @@
 
 import type * as auth from "../auth.js";
 import type * as billing from "../billing.js";
-import type * as billingActions from "../billingActions.js";
-import type * as billingWebhook from "../billingWebhook.js";
+import type * as dodo from "../dodo.js";
 import type * as explore from "../explore.js";
 import type * as http from "../http.js";
 import type * as invitations from "../invitations.js";
@@ -32,8 +31,7 @@ import type {
 declare const fullApi: ApiFromModules<{
   auth: typeof auth;
   billing: typeof billing;
-  billingActions: typeof billingActions;
-  billingWebhook: typeof billingWebhook;
+  dodo: typeof dodo;
   explore: typeof explore;
   http: typeof http;
   invitations: typeof invitations;
@@ -72,4 +70,6 @@ export declare const internal: FilterApi<
   FunctionReference<any, "internal">
 >;
 
-export declare const components: {};
+export declare const components: {
+  dodopayments: import("@dodopayments/convex/_generated/component.js").ComponentApi<"dodopayments">;
+};

@@ -11,11 +11,11 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AppRouteRouteImport } from './routes/app/route'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as UpgradeIndexRouteImport } from './routes/upgrade/index'
 import { Route as ExploreIndexRouteImport } from './routes/explore/index'
 import { Route as AppIndexRouteImport } from './routes/app/index'
 import { Route as SSlugRouteImport } from './routes/s/$slug'
 import { Route as InviteTokenRouteImport } from './routes/invite/$token'
+import { Route as AppUpgradeIndexRouteImport } from './routes/app/upgrade/index'
 import { Route as AppTeamIndexRouteImport } from './routes/app/team/index'
 import { Route as AppStartupIndexRouteImport } from './routes/app/startup/index'
 import { Route as AppSprintsIndexRouteImport } from './routes/app/sprints/index'
@@ -34,11 +34,6 @@ const AppRouteRoute = AppRouteRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const UpgradeIndexRoute = UpgradeIndexRouteImport.update({
-  id: '/upgrade/',
-  path: '/upgrade/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ExploreIndexRoute = ExploreIndexRouteImport.update({
@@ -60,6 +55,11 @@ const InviteTokenRoute = InviteTokenRouteImport.update({
   id: '/invite/$token',
   path: '/invite/$token',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AppUpgradeIndexRoute = AppUpgradeIndexRouteImport.update({
+  id: '/upgrade/',
+  path: '/upgrade/',
+  getParentRoute: () => AppRouteRoute,
 } as any)
 const AppTeamIndexRoute = AppTeamIndexRouteImport.update({
   id: '/team/',
@@ -114,7 +114,6 @@ export interface FileRoutesByFullPath {
   '/s/$slug': typeof SSlugRoute
   '/app/': typeof AppIndexRoute
   '/explore': typeof ExploreIndexRoute
-  '/upgrade': typeof UpgradeIndexRoute
   '/app/sprints/$sprintId': typeof AppSprintsSprintIdRoute
   '/app/sprints/new': typeof AppSprintsNewRoute
   '/app/startups/new': typeof AppStartupsNewRoute
@@ -124,6 +123,7 @@ export interface FileRoutesByFullPath {
   '/app/sprints': typeof AppSprintsIndexRoute
   '/app/startup': typeof AppStartupIndexRoute
   '/app/team': typeof AppTeamIndexRoute
+  '/app/upgrade': typeof AppUpgradeIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -131,7 +131,6 @@ export interface FileRoutesByTo {
   '/s/$slug': typeof SSlugRoute
   '/app': typeof AppIndexRoute
   '/explore': typeof ExploreIndexRoute
-  '/upgrade': typeof UpgradeIndexRoute
   '/app/sprints/$sprintId': typeof AppSprintsSprintIdRoute
   '/app/sprints/new': typeof AppSprintsNewRoute
   '/app/startups/new': typeof AppStartupsNewRoute
@@ -141,6 +140,7 @@ export interface FileRoutesByTo {
   '/app/sprints': typeof AppSprintsIndexRoute
   '/app/startup': typeof AppStartupIndexRoute
   '/app/team': typeof AppTeamIndexRoute
+  '/app/upgrade': typeof AppUpgradeIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -150,7 +150,6 @@ export interface FileRoutesById {
   '/s/$slug': typeof SSlugRoute
   '/app/': typeof AppIndexRoute
   '/explore/': typeof ExploreIndexRoute
-  '/upgrade/': typeof UpgradeIndexRoute
   '/app/sprints/$sprintId': typeof AppSprintsSprintIdRoute
   '/app/sprints/new': typeof AppSprintsNewRoute
   '/app/startups/new': typeof AppStartupsNewRoute
@@ -160,6 +159,7 @@ export interface FileRoutesById {
   '/app/sprints/': typeof AppSprintsIndexRoute
   '/app/startup/': typeof AppStartupIndexRoute
   '/app/team/': typeof AppTeamIndexRoute
+  '/app/upgrade/': typeof AppUpgradeIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -170,7 +170,6 @@ export interface FileRouteTypes {
     | '/s/$slug'
     | '/app/'
     | '/explore'
-    | '/upgrade'
     | '/app/sprints/$sprintId'
     | '/app/sprints/new'
     | '/app/startups/new'
@@ -180,6 +179,7 @@ export interface FileRouteTypes {
     | '/app/sprints'
     | '/app/startup'
     | '/app/team'
+    | '/app/upgrade'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -187,7 +187,6 @@ export interface FileRouteTypes {
     | '/s/$slug'
     | '/app'
     | '/explore'
-    | '/upgrade'
     | '/app/sprints/$sprintId'
     | '/app/sprints/new'
     | '/app/startups/new'
@@ -197,6 +196,7 @@ export interface FileRouteTypes {
     | '/app/sprints'
     | '/app/startup'
     | '/app/team'
+    | '/app/upgrade'
   id:
     | '__root__'
     | '/'
@@ -205,7 +205,6 @@ export interface FileRouteTypes {
     | '/s/$slug'
     | '/app/'
     | '/explore/'
-    | '/upgrade/'
     | '/app/sprints/$sprintId'
     | '/app/sprints/new'
     | '/app/startups/new'
@@ -215,6 +214,7 @@ export interface FileRouteTypes {
     | '/app/sprints/'
     | '/app/startup/'
     | '/app/team/'
+    | '/app/upgrade/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -223,7 +223,6 @@ export interface RootRouteChildren {
   InviteTokenRoute: typeof InviteTokenRoute
   SSlugRoute: typeof SSlugRoute
   ExploreIndexRoute: typeof ExploreIndexRoute
-  UpgradeIndexRoute: typeof UpgradeIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -240,13 +239,6 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/upgrade/': {
-      id: '/upgrade/'
-      path: '/upgrade'
-      fullPath: '/upgrade'
-      preLoaderRoute: typeof UpgradeIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/explore/': {
@@ -276,6 +268,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/invite/$token'
       preLoaderRoute: typeof InviteTokenRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/app/upgrade/': {
+      id: '/app/upgrade/'
+      path: '/upgrade'
+      fullPath: '/app/upgrade'
+      preLoaderRoute: typeof AppUpgradeIndexRouteImport
+      parentRoute: typeof AppRouteRoute
     }
     '/app/team/': {
       id: '/app/team/'
@@ -354,6 +353,7 @@ interface AppRouteRouteChildren {
   AppSprintsIndexRoute: typeof AppSprintsIndexRoute
   AppStartupIndexRoute: typeof AppStartupIndexRoute
   AppTeamIndexRoute: typeof AppTeamIndexRoute
+  AppUpgradeIndexRoute: typeof AppUpgradeIndexRoute
 }
 
 const AppRouteRouteChildren: AppRouteRouteChildren = {
@@ -367,6 +367,7 @@ const AppRouteRouteChildren: AppRouteRouteChildren = {
   AppSprintsIndexRoute: AppSprintsIndexRoute,
   AppStartupIndexRoute: AppStartupIndexRoute,
   AppTeamIndexRoute: AppTeamIndexRoute,
+  AppUpgradeIndexRoute: AppUpgradeIndexRoute,
 }
 
 const AppRouteRouteWithChildren = AppRouteRoute._addFileChildren(
@@ -379,7 +380,6 @@ const rootRouteChildren: RootRouteChildren = {
   InviteTokenRoute: InviteTokenRoute,
   SSlugRoute: SSlugRoute,
   ExploreIndexRoute: ExploreIndexRoute,
-  UpgradeIndexRoute: UpgradeIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

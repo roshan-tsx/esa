@@ -14,6 +14,9 @@ importers:
       '@convex-dev/auth':
         specifier: ^0.0.94
         version: 0.0.94(@auth/core@0.37.0)(convex@1.41.0(react@19.2.3))(react@19.2.3)
+      '@dodopayments/convex':
+        specifier: ^0.2.12
+        version: 0.2.12(convex@1.41.0(react@19.2.3))(zod@4.2.0)
       '@hookform/resolvers':
         specifier: ^5.2.2
         version: 5.2.2(react-hook-form@7.70.0(react@19.2.3))
@@ -364,6 +367,17 @@ packages:
     peerDependenciesMeta:
       react:
         optional: true
+
+  '@dodopayments/convex@0.2.12':
+    resolution: {integrity: sha512-CiQ6tVfzbbY/QwUvDxfmBUI+XjCs9DXnR4/kh2x4cykItbtbc8HyBbav0PY3ZkIYk3M/AjrkrgO21zeLVRn6gg==}
+    peerDependencies:
+      convex: ^1.26.0
+      zod: ^3.25.0 || ^4.0.0
+
+  '@dodopayments/core@0.3.12':
+    resolution: {integrity: sha512-cahX0AmZI9QN6PhXDE24vUa/UBD4qU21iCgyJRC0L7jxX3dQNMwQSfP2ow9xovnrBQxrsebnwwlDoKi5wl20dA==}
+    peerDependencies:
+      zod: ^3.25.0 || ^4.0.0
 
   '@emnapi/core@1.7.1':
     resolution: {integrity: sha512-o1uhUASyo921r2XtHYOHy7gdkGLge8ghBEQHMWmyJFoXlpU58kIrhhN3w26lpQb6dspetweapMn2CSNwQ8I4wg==}
@@ -1496,6 +1510,9 @@ packages:
     peerDependencies:
       solid-js: ^1.6.12
 
+  '@stablelib/base64@1.0.1':
+    resolution: {integrity: sha512-1bnPQqSxSuc3Ii6MhBysoWCg58j97aUjuCSZrGSmDxNqtytIi0k8utUenAwTZN4V5mXXYGsVUI9zeBqy+jBOSQ==}
+
   '@standard-schema/utils@0.3.0':
     resolution: {integrity: sha512-e7Mew686owMaPJVNNLs55PUvgz371nKgwsc4vxE49zsODpJEnxgxRo2y/OKrqueavXgZNMDVj3DdHFlaSAeU8g==}
 
@@ -1990,6 +2007,10 @@ packages:
     resolution: {integrity: sha512-sSuxWU5j5SR9QQji/o2qMvqRNYRDOcBTgsJ/DeCf4iSN4gW+gNMXM7wFIP+fdXZxoNiAnHUTGjCr+TSWXdRDKg==}
     engines: {node: '>=0.3.1'}
 
+  dodopayments@2.42.2:
+    resolution: {integrity: sha512-XBF8zrnfkjAhX7OyrR3KauK6bH+oW3yZ+uqy6RBWI5XdZvrEtASabvvfHrBX3UGR3Bbxl3t1rkpcao+riKSOuw==}
+    hasBin: true
+
   dom-serializer@2.0.0:
     resolution: {integrity: sha512-wIkAryiqt/nV5EQKqQpo3SToSOV9J0DnbJqwK7Wv/Trc92zIAYZ4FlMu+JPFW1DfGFt81ZTCGgDEabffXeLyJg==}
 
@@ -2138,6 +2159,9 @@ packages:
 
   exsolve@1.0.8:
     resolution: {integrity: sha512-LmDxfWXwcTArk8fUEnOfSZpHOJ6zOMUJKOtFLFqJLoKJetuQG874Uc7/Kki7zFLzYybmZhp1M7+98pfMqeX8yA==}
+
+  fast-sha256@1.3.0:
+    resolution: {integrity: sha512-n11RGP/lrWEFI/bWdygLxhI+pVeo1ZYIVwvvPkW7azl/rOy+F3HYRZ2K5zeE9mmkhQppyv9sQFx0JM9UabnpPQ==}
 
   fdir@6.5.0:
     resolution: {integrity: sha512-tIbYtZbucOs0BRGqPJkshJUYdL+SDH7dVM8gjy+ERp3WAUjLEFJE+02kanyHtwjWOnwrKYBiwAmM0p4kLJAnXg==}
@@ -2675,6 +2699,9 @@ packages:
     engines: {node: '>=20.16.0'}
     hasBin: true
 
+  standardwebhooks@1.0.0:
+    resolution: {integrity: sha512-BbHGOQK9olHPMvQNHWul6MYlrRTAOKn03rOe4A8O3CLWhNf4YHBqq2HJKKC+sfqpxiBY52pNeesD6jIiLDz8jg==}
+
   tailwind-merge@3.4.0:
     resolution: {integrity: sha512-uSaO4gnW+b3Y2aWoWfFpX62vn2sR3skfhbjsEnaBI81WD1wBLlHZe5sWf0AqjksNdYTbGBEd0UasQMT3SNV15g==}
 
@@ -3185,6 +3212,18 @@ snapshots:
       server-only: 0.0.1
     optionalDependencies:
       react: 19.2.3
+
+  '@dodopayments/convex@0.2.12(convex@1.41.0(react@19.2.3))(zod@4.2.0)':
+    dependencies:
+      '@dodopayments/core': 0.3.12(zod@4.2.0)
+      convex: 1.41.0(react@19.2.3)
+      zod: 4.2.0
+
+  '@dodopayments/core@0.3.12(zod@4.2.0)':
+    dependencies:
+      dodopayments: 2.42.2
+      standardwebhooks: 1.0.0
+      zod: 4.2.0
 
   '@emnapi/core@1.7.1':
     dependencies:
@@ -4019,6 +4058,8 @@ snapshots:
     dependencies:
       solid-js: 1.9.10
 
+  '@stablelib/base64@1.0.1': {}
+
   '@standard-schema/utils@0.3.0': {}
 
   '@t3-oss/env-core@0.13.10(typescript@5.9.3)(zod@4.2.0)':
@@ -4600,6 +4641,10 @@ snapshots:
 
   diff@8.0.2: {}
 
+  dodopayments@2.42.2:
+    dependencies:
+      standardwebhooks: 1.0.0
+
   dom-serializer@2.0.0:
     dependencies:
       domelementtype: 2.3.0
@@ -4707,6 +4752,8 @@ snapshots:
   esprima@4.0.1: {}
 
   exsolve@1.0.8: {}
+
+  fast-sha256@1.3.0: {}
 
   fdir@6.5.0(picomatch@4.0.3):
     optionalDependencies:
@@ -5186,6 +5233,11 @@ snapshots:
   srvx@0.8.16: {}
 
   srvx@0.9.8: {}
+
+  standardwebhooks@1.0.0:
+    dependencies:
+      '@stablelib/base64': 1.0.1
+      fast-sha256: 1.3.0
 
   tailwind-merge@3.4.0: {}
 

@@ -1,15 +1,15 @@
+import { getAuthUserId } from "@convex-dev/auth/server";
 import { v } from "convex/values";
+import { internal } from "./_generated/api";
+import { action, internalMutation, query } from "./_generated/server";
 import {
-	internalMutation,
-	internalQuery,
-	query,
-} from "./_generated/server";
+	type BillingInterval,
+	checkout,
+	getProductIdForInterval,
+} from "./dodo";
 import { isProUser, requireUserId } from "./lib/auth";
 
-// Dummy billing backend — replace with Dodo Payments integration later.
-// Real implementation preserved in git history.
-
-export const getSubscription = query({
+export const getPlan = query({
 	args: {},
 	handler: async (ctx) => {
 		const userId = await requireUserId(ctx);
@@ -18,34 +18,61 @@ export const getSubscription = query({
 		return {
 			isPro: pro,
 			planTier: pro ? ("pro" as const) : ("free" as const),
-			subscription: null,
 		};
 	},
 });
 
-export const activatePro = internalMutation({
+export const setPlanTier = internalMutation({
 	args: {
 		userId: v.id("users"),
-		providerSubscriptionId: v.string(),
-		status: v.union(
-			v.literal("active"),
-			v.literal("cancelled"),
-			v.literal("past_due"),
-			v.literal("trialing"),
-		),
-		currentPeriodEnd: v.optional(v.number()),
+		planTier: v.union(v.literal("free"), v.literal("pro")),
 	},
-	handler: async () => {
-		// No-op until Dodo Payments is wired up.
+	handler: async (ctx, args) => {
+		await ctx.db.patch(args.userId, { planTier: args.planTier });
 	},
 });
 
-export const getUserByEmail = internalQuery({
-	args: { email: v.string() },
-	handler: async (ctx, args) => {
-		return await ctx.db
-			.query("users")
-			.withIndex("email", (q) => q.eq("email", args.email))
-			.unique();
+export const createCheckoutLink = action({
+	args: {
+		returnUrl: v.string(),
+		interval: v.optional(
+			v.union(v.literal("monthly"), v.literal("yearly")),
+		),
+	},
+	handler: async (ctx, args): Promise<{ checkoutUrl: string }> => {
+		const userId = await getAuthUserId(ctx);
+		if (!userId) {
+			throw new Error("Not authenticated");
+		}
+
+		const user = await ctx.runQuery(internal.users.getById, { userId });
+		if (!user?.email) {
+			throw new Error("Add an email to your account before upgrading");
+		}
+
+		const interval: BillingInterval = args.interval ?? "yearly";
+		const productId = getProductIdForInterval(interval);
+
+		const session = await checkout(ctx, {
+			payload: {
+				product_cart: [{ product_id: productId, quantity: 1 }],
+				customer: {
+					email: user.email,
+					name: user.name ?? user.email,
+				},
+				return_url: args.returnUrl,
+				billing_currency: "USD",
+				metadata: {
+					userId,
+					interval,
+				},
+			},
+		});
+
+		if (!session?.checkout_url) {
+			throw new Error("Checkout session did not return a checkout_url");
+		}
+
+		return { checkoutUrl: session.checkout_url };
 	},
 });

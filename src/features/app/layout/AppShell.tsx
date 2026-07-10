@@ -97,7 +97,7 @@ export function AppShell({ children }: { readonly children: React.ReactNode }) {
 								<DropdownMenuSeparator />
 								{me?.planTier === "free" && (
 									<DropdownMenuItem asChild>
-										<Link to="/upgrade" className="cursor-pointer">
+										<Link to="/app/upgrade" className="cursor-pointer">
 											Upgrade to Pro
 										</Link>
 									</DropdownMenuItem>

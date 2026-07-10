@@ -85,7 +85,10 @@ export function ExplorePage({ inApp = false }: ExplorePageProps) {
 			{results && !results.isPro && results.applicationLimit !== null && (
 				<p className="rounded-lg border border-border/60 bg-card/40 px-4 py-3 text-sm text-muted-foreground">
 					Free plan: {results.applicationLimit} sprint applications per day.{" "}
-					<Link to="/upgrade" className="underline hover:text-foreground">
+					<Link
+						to="/app/upgrade"
+						className="underline hover:text-foreground"
+					>
 						Go Pro
 					</Link>{" "}
 					for unlimited.
@@ -231,7 +234,7 @@ export function ExplorePage({ inApp = false }: ExplorePageProps) {
 				</Link>
 				<div className="flex gap-2">
 					<Button asChild variant="ghost" size="sm">
-						<Link to="/upgrade">Upgrade</Link>
+						<Link to="/app/upgrade">Upgrade</Link>
 					</Button>
 					<Button asChild size="sm">
 						<Link to="/">Join Engin</Link>

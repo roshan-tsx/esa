@@ -20,6 +20,12 @@
 
 	// use LF line endings
 	"files.eol": "\n",
+  "explorer.fileNesting.enabled": true,
+  "explorer.fileNesting.expand": false,
+  "explorer.fileNesting.patterns": {
+    "package.json": ".env*, *.config.js, *.config.ts, *.config.mjs, *.config.cjs, *.lock, .gitignore, .eslint*, .prettier*, tsconfig.json"
+  },
+
 
 	"editor.formatOnType": false, // required
 	"editor.formatOnPaste": true, // optional

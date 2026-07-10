@@ -9,17 +9,7 @@ export function EmptyDashboard() {
 				Add a workspace to manage tasks, pitch deck, team invites, and hiring
 				sprints. Switch between startups anytime from the top bar.
 			</p>
-			<ol className="mt-8 w-full space-y-2 text-left text-sm text-muted-foreground">
-				<li className="rounded-lg border px-4 py-3">
-					1. Create your startup workspace
-				</li>
-				<li className="rounded-lg border px-4 py-3">
-					2. Invite your team and ship tasks
-				</li>
-				<li className="rounded-lg border px-4 py-3">
-					3. Publish your pitch and post hiring sprints
-				</li>
-			</ol>
+			<ol className="mt-8 w-full space-y-2 text-left text-sm text-muted-foreground"></ol>
 			<Button asChild size="lg" className="mt-8">
 				<Link to="/app/startups/new">Create startup</Link>
 			</Button>

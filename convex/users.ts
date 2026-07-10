@@ -1,7 +1,7 @@
 import { getAuthUserId } from "@convex-dev/auth/server";
 import { v } from "convex/values";
-import { mutation, query } from "./_generated/server";
-import { requireUserId, initUserProfile } from "./lib/auth";
+import { internalQuery, mutation, query } from "./_generated/server";
+import { initUserProfile, requireUserId } from "./lib/auth";
 
 export const getMe = query({
 	args: {},
@@ -24,6 +24,23 @@ export const getMe = query({
 			planTier: user.planTier ?? "free",
 			totalScore: user.totalScore ?? 0,
 		};
+	},
+});
+
+export const getById = internalQuery({
+	args: { userId: v.id("users") },
+	handler: async (ctx, args) => {
+		return await ctx.db.get(args.userId);
+	},
+});
+
+export const getByEmail = internalQuery({
+	args: { email: v.string() },
+	handler: async (ctx, args) => {
+		return await ctx.db
+			.query("users")
+			.withIndex("email", (q) => q.eq("email", args.email))
+			.unique();
 	},
 });
 

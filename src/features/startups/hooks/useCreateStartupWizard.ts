@@ -155,6 +155,9 @@ export function useCreateStartupWizard() {
 	}
 
 	useEffect(() => {
+		if (!step.id) {
+			return;
+		}
 		inputRef.current?.focus();
 	}, [step.id]);
 
