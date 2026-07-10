@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Check, ChevronsUpDown, Plus } from "lucide-react";
+import { ArrowLeftRight, Check, Plus } from "lucide-react";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import {
@@ -18,15 +18,20 @@ export function StartupSwitcher() {
 	const { active, startups, isLoading, setActiveStartup } = useWorkspace();
 
 	if (isLoading) {
-		return <Skeleton className="h-9 w-28 rounded-md" />;
+		return <Skeleton className="h-8 w-24 rounded-md" />;
 	}
 
 	if (startups.length === 0) {
 		return (
-			<Button asChild variant="outline" size="sm" className="inline-flex">
+			<Button
+				asChild
+				variant="ghost"
+				size="sm"
+				className="h-8 gap-1.5 px-2 text-muted-foreground hover:text-foreground"
+			>
 				<Link to="/app/startups/new">
 					<Plus className="size-3.5" />
-					Create startup
+					<span className="hidden sm:inline">Create startup</span>
 				</Link>
 			</Button>
 		);
@@ -44,12 +49,14 @@ export function StartupSwitcher() {
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
 				<Button
-					variant="outline"
+					variant="ghost"
 					size="sm"
-					className="inline-flex max-w-36 gap-1.5 sm:max-w-44"
+					className="group h-8 max-w-40 gap-1.5 px-2 text-muted-foreground transition-colors hover:bg-muted/60 hover:text-foreground sm:max-w-52"
 				>
-					<span className="truncate">{active?.startup.name ?? "Select startup"}</span>
-					<ChevronsUpDown className="size-3.5 shrink-0 opacity-50" />
+					<ArrowLeftRight className="size-3.5 shrink-0 opacity-60 transition-transform duration-300 group-hover:rotate-180 group-data-[state=open]:rotate-180" />
+					<span className="truncate font-medium">
+						{active?.startup.name ?? "Select startup"}
+					</span>
 				</Button>
 			</DropdownMenuTrigger>
 			<DropdownMenuContent align="start" className="w-56">
@@ -67,7 +74,7 @@ export function StartupSwitcher() {
 						</div>
 						<Check
 							className={cn(
-								"size-4 shrink-0",
+								"size-4 shrink-0 transition-opacity",
 								startup._id === activeId ? "opacity-100" : "opacity-0",
 							)}
 						/>

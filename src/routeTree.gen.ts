@@ -19,6 +19,7 @@ import { Route as AppUpgradeIndexRouteImport } from './routes/app/upgrade/index'
 import { Route as AppTeamIndexRouteImport } from './routes/app/team/index'
 import { Route as AppStartupIndexRouteImport } from './routes/app/startup/index'
 import { Route as AppSprintsIndexRouteImport } from './routes/app/sprints/index'
+import { Route as AppScoreIndexRouteImport } from './routes/app/score/index'
 import { Route as AppPitchIndexRouteImport } from './routes/app/pitch/index'
 import { Route as AppExploreIndexRouteImport } from './routes/app/explore/index'
 import { Route as AppDashboardIndexRouteImport } from './routes/app/dashboard/index'
@@ -76,6 +77,11 @@ const AppSprintsIndexRoute = AppSprintsIndexRouteImport.update({
   path: '/sprints/',
   getParentRoute: () => AppRouteRoute,
 } as any)
+const AppScoreIndexRoute = AppScoreIndexRouteImport.update({
+  id: '/score/',
+  path: '/score/',
+  getParentRoute: () => AppRouteRoute,
+} as any)
 const AppPitchIndexRoute = AppPitchIndexRouteImport.update({
   id: '/pitch/',
   path: '/pitch/',
@@ -120,6 +126,7 @@ export interface FileRoutesByFullPath {
   '/app/dashboard': typeof AppDashboardIndexRoute
   '/app/explore': typeof AppExploreIndexRoute
   '/app/pitch': typeof AppPitchIndexRoute
+  '/app/score': typeof AppScoreIndexRoute
   '/app/sprints': typeof AppSprintsIndexRoute
   '/app/startup': typeof AppStartupIndexRoute
   '/app/team': typeof AppTeamIndexRoute
@@ -137,6 +144,7 @@ export interface FileRoutesByTo {
   '/app/dashboard': typeof AppDashboardIndexRoute
   '/app/explore': typeof AppExploreIndexRoute
   '/app/pitch': typeof AppPitchIndexRoute
+  '/app/score': typeof AppScoreIndexRoute
   '/app/sprints': typeof AppSprintsIndexRoute
   '/app/startup': typeof AppStartupIndexRoute
   '/app/team': typeof AppTeamIndexRoute
@@ -156,6 +164,7 @@ export interface FileRoutesById {
   '/app/dashboard/': typeof AppDashboardIndexRoute
   '/app/explore/': typeof AppExploreIndexRoute
   '/app/pitch/': typeof AppPitchIndexRoute
+  '/app/score/': typeof AppScoreIndexRoute
   '/app/sprints/': typeof AppSprintsIndexRoute
   '/app/startup/': typeof AppStartupIndexRoute
   '/app/team/': typeof AppTeamIndexRoute
@@ -176,6 +185,7 @@ export interface FileRouteTypes {
     | '/app/dashboard'
     | '/app/explore'
     | '/app/pitch'
+    | '/app/score'
     | '/app/sprints'
     | '/app/startup'
     | '/app/team'
@@ -193,6 +203,7 @@ export interface FileRouteTypes {
     | '/app/dashboard'
     | '/app/explore'
     | '/app/pitch'
+    | '/app/score'
     | '/app/sprints'
     | '/app/startup'
     | '/app/team'
@@ -211,6 +222,7 @@ export interface FileRouteTypes {
     | '/app/dashboard/'
     | '/app/explore/'
     | '/app/pitch/'
+    | '/app/score/'
     | '/app/sprints/'
     | '/app/startup/'
     | '/app/team/'
@@ -297,6 +309,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppSprintsIndexRouteImport
       parentRoute: typeof AppRouteRoute
     }
+    '/app/score/': {
+      id: '/app/score/'
+      path: '/score'
+      fullPath: '/app/score'
+      preLoaderRoute: typeof AppScoreIndexRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
     '/app/pitch/': {
       id: '/app/pitch/'
       path: '/pitch'
@@ -350,6 +369,7 @@ interface AppRouteRouteChildren {
   AppDashboardIndexRoute: typeof AppDashboardIndexRoute
   AppExploreIndexRoute: typeof AppExploreIndexRoute
   AppPitchIndexRoute: typeof AppPitchIndexRoute
+  AppScoreIndexRoute: typeof AppScoreIndexRoute
   AppSprintsIndexRoute: typeof AppSprintsIndexRoute
   AppStartupIndexRoute: typeof AppStartupIndexRoute
   AppTeamIndexRoute: typeof AppTeamIndexRoute
@@ -364,6 +384,7 @@ const AppRouteRouteChildren: AppRouteRouteChildren = {
   AppDashboardIndexRoute: AppDashboardIndexRoute,
   AppExploreIndexRoute: AppExploreIndexRoute,
   AppPitchIndexRoute: AppPitchIndexRoute,
+  AppScoreIndexRoute: AppScoreIndexRoute,
   AppSprintsIndexRoute: AppSprintsIndexRoute,
   AppStartupIndexRoute: AppStartupIndexRoute,
   AppTeamIndexRoute: AppTeamIndexRoute,

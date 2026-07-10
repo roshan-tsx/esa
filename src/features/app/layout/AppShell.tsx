@@ -1,19 +1,9 @@
-import { useAuthActions } from "@convex-dev/auth/react";
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Avatar, AvatarFallback } from "~/components/ui/avatar";
-import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuSeparator,
-	DropdownMenuTrigger,
-} from "~/components/ui/dropdown-menu";
 import { useCurrentUser } from "~/features/app/hooks/useCurrentUser";
-import { NotificationBell } from "~/features/app/ui/NotificationBell";
+import { ScoreChip } from "~/features/app/ui/ScoreChip";
 import { StartupSwitcher } from "~/features/app/ui/StartupSwitcher";
-import { initials } from "~/lib/initials";
+import { UserMenu } from "~/features/app/ui/UserMenu";
 import { cn } from "~/lib/utils";
 
 const tabs = [
@@ -44,73 +34,48 @@ const tabs = [
 ] as const;
 
 export function AppShell({ children }: { readonly children: React.ReactNode }) {
-	const { signOut } = useAuthActions();
 	const pathname = useRouterState({
 		select: (state) => state.location.pathname,
 	});
 	const { user: me } = useCurrentUser();
+	const isPro = me?.planTier === "pro";
 
 	return (
 		<div className="flex min-h-dvh flex-col bg-background text-foreground">
 			<header className="sticky top-0 z-50 border-b border-border bg-background">
 				<div className="flex h-16 items-center justify-between gap-4 px-4 sm:px-6">
-					<div className="flex min-w-0 items-center gap-2 sm:gap-3">
+					<div className="flex min-w-0 items-center gap-1 sm:gap-2">
 						<Link
 							to="/app/dashboard"
 							className="shrink-0 text-xl font-semibold tracking-tight sm:text-2xl"
 						>
 							Engin
 						</Link>
+						<span
+							aria-hidden
+							className="hidden h-4 w-px bg-border sm:block"
+						/>
 						<StartupSwitcher />
 					</div>
 
-					<div className="flex items-center gap-2 sm:gap-3">
-						<NotificationBell />
-
-						<DropdownMenu>
-							<DropdownMenuTrigger asChild>
-								<Button
-									variant="outline"
-									className="h-10 gap-2 rounded-md px-2"
-								>
-									<Avatar className="size-7">
-										<AvatarFallback className="text-xs">
-											{initials(me?.name ?? null, me?.email ?? null)}
-										</AvatarFallback>
-									</Avatar>
-									<span className="hidden max-w-32 truncate text-sm sm:inline">
-										{me?.name ?? me?.email ?? "Account"}
-									</span>
-								</Button>
-							</DropdownMenuTrigger>
-							<DropdownMenuContent align="end" className="w-52">
-								{me && (
-									<div className="px-2 py-2">
-										<p className="truncate text-sm font-medium">
-											{me.name ?? me.email ?? "User"}
-										</p>
-										<Badge variant="secondary" className="mt-1 text-xs">
-											{me.planTier}
-										</Badge>
-									</div>
+					<div className="flex shrink-0 items-center gap-2">
+						{me ? (
+							<>
+								<ScoreChip score={me.totalScore} isPro={isPro} />
+								{!isPro && (
+									<Button asChild size="sm" className="h-8 px-3">
+										<Link to="/app/upgrade">Upgrade</Link>
+									</Button>
 								)}
-								<DropdownMenuSeparator />
-								{me?.planTier === "free" && (
-									<DropdownMenuItem asChild>
-										<Link to="/app/upgrade" className="cursor-pointer">
-											Upgrade to Pro
-										</Link>
-									</DropdownMenuItem>
-								)}
-								<DropdownMenuSeparator />
-								<DropdownMenuItem
-									variant="destructive"
-									onClick={() => signOut()}
-								>
-									Log out
-								</DropdownMenuItem>
-							</DropdownMenuContent>
-						</DropdownMenu>
+								{me.name ? (
+									<UserMenu
+										name={me.name}
+										email={me.email}
+										image={me.image}
+									/>
+								) : null}
+							</>
+						) : null}
 					</div>
 				</div>
 
